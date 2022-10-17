@@ -9,7 +9,7 @@ namespace CarParts.Models.Main
         public string Image { get; set; }
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
-        public int CarCategoryId { get; set; }
+        public int? CarCategoryId { get; set; }
         public CarCategory CarCategory { get; set; }
         public ICollection<CarPart> CarParts { get; set; }
     }
