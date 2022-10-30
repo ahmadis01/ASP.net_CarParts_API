@@ -1,4 +1,6 @@
-﻿using CarParts.Data;
+﻿using AutoMapper;
+using CarParts.Data;
+using CarParts.Dto;
 using CarParts.Interfaces;
 using CarParts.Models.Main;
 using Microsoft.EntityFrameworkCore;
@@ -8,13 +10,16 @@ namespace CarParts.Repoistory
     public class CountryRepository : ICountryRepository
     {
         private readonly CarPartContext _context;
+        private readonly IMapper _mapper;
 
-        public CountryRepository(CarPartContext context)
+        public CountryRepository(CarPartContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
-        public async Task<Country> AddCountry(Country country)
+        public async Task<Country> AddCountry(CountryDto countryDto)
         {
+            Country country = _mapper.Map<Country>(countryDto);
             var result = await _context.AddAsync(country);
             return result.Entity;
         }
@@ -39,8 +44,9 @@ namespace CarParts.Repoistory
             return country;
         }
 
-        public async Task<Country> UpdateCountry(Country country)
+        public async Task<Country> UpdateCountry(CountryDto countryDto)
         {
+            Country country = _mapper.Map<Country>(countryDto);
             var result = _context.Countries.Update(country);
             await _context.SaveChangesAsync();
             return result.Entity;
