@@ -7,8 +7,8 @@ namespace CarParts.Interfaces
     {
         Task<IEnumerable<Country>> GetCountries();
         Task<Country> GetCountry(int id);
-        Task<Country> AddCountry(Country country);
-        Task<Country> UpdateCountry(Country country);
+        Task<Country> AddCountry(CountryDto countryDto);
+        Task<Country> UpdateCountry(CountryDto countryDto);
         bool DeleteCountry(int id);
     }
 }
