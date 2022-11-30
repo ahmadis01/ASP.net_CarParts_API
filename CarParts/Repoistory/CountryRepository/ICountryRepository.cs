@@ -1,7 +1,7 @@
 ﻿using CarParts.Dto;
 using CarParts.Models.Main;
 
-namespace CarParts.Interfaces
+namespace CarParts.Repoistory.CountryRepository
 {
     public interface ICountryRepository
     {

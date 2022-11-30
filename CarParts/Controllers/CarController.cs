@@ -1,7 +1,7 @@
 ﻿using CarParts.Dto;
-using CarParts.Interfaces;
 using CarParts.Models.Main;
 using CarParts.Models.Security;
+using CarParts.Repoistory.CarRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

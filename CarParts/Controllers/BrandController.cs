@@ -1,5 +1,5 @@
 ﻿using CarParts.Dto;
-using CarParts.Interfaces;
+using CarParts.Repoistory.BrandRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

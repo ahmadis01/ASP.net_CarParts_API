@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
 using CarParts.Data;
 using CarParts.Dto;
-using CarParts.Interfaces;
 using CarParts.Models.Main;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarParts.Repoistory
+namespace CarParts.Repoistory.BrandRepository
 {
     public class BrandRepository : IBrandRepository
     {
         private readonly CarPartContext _context;
         private readonly IMapper _mapper;
 
-        public BrandRepository(CarPartContext context ,IMapper mapper)
+        public BrandRepository(CarPartContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;

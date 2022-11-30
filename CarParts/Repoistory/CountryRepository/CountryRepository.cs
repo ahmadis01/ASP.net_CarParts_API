@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
 using CarParts.Data;
 using CarParts.Dto;
-using CarParts.Interfaces;
 using CarParts.Models.Main;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarParts.Repoistory
+namespace CarParts.Repoistory.CountryRepository
 {
     public class CountryRepository : ICountryRepository
     {
         private readonly CarPartContext _context;
         private readonly IMapper _mapper;
 
-        public CountryRepository(CarPartContext context,IMapper mapper)
+        public CountryRepository(CarPartContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -26,15 +25,15 @@ namespace CarParts.Repoistory
 
         public bool DeleteCountry(int id)
         {
-            var country = _context.Countries.FirstOrDefault(c => c.Id == id); 
+            var country = _context.Countries.FirstOrDefault(c => c.Id == id);
             _context.Remove(country);
-            var saved =  _context.SaveChanges();
+            var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
 
         public async Task<IEnumerable<Country>> GetCountries()
         {
-            var countries =await _context.Countries.OrderBy(c => c.Id).ToListAsync();
+            var countries = await _context.Countries.OrderBy(c => c.Id).ToListAsync();
             return countries;
         }
 

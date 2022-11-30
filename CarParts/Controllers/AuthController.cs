@@ -1,5 +1,5 @@
 ﻿using CarParts.Dto.User;
-using CarParts.Interfaces;
+using CarParts.Repoistory.AuthRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
