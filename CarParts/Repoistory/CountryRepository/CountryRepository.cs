@@ -19,6 +19,7 @@ namespace CarParts.Repoistory.CountryRepository
         public async Task<Country> AddCountry(CountryDto countryDto)
         {
             Country country = _mapper.Map<Country>(countryDto);
+            country.CreatedAt = DateTime.Now;
             var result = await _context.AddAsync(country);
             return result.Entity;
         }
@@ -46,6 +47,7 @@ namespace CarParts.Repoistory.CountryRepository
         public async Task<Country> UpdateCountry(CountryDto countryDto)
         {
             Country country = _mapper.Map<Country>(countryDto);
+            country.UpdatedAt = DateTime.Now;
             var result = _context.Countries.Update(country);
             await _context.SaveChangesAsync();
             return result.Entity;

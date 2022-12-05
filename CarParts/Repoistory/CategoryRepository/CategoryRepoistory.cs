@@ -1,6 +1,6 @@
 ﻿namespace CarParts.Repoistory.CategoryRepository
 {
-    public class CategoryRepoistory
+    public class CategoryRepoistory 
     {
     }
 }

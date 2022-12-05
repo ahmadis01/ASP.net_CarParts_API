@@ -21,6 +21,7 @@ namespace CarParts.Repoistory.CarRepository
         public async Task<Car> AddCar(CarDto carDto)
         {
             Car car = _mapper.Map<Car>(carDto);
+            car.CreatedAt = DateTime.Now;
             var result = await _context.Cars.AddAsync(car);
             await _context.SaveChangesAsync();
             return result.Entity;
@@ -45,6 +46,7 @@ namespace CarParts.Repoistory.CarRepository
             if (result != null)
             {
                 Car car = _mapper.Map<Car>(carDto);
+                car.UpdatedAt = DateTime.Now;
                 var re = _context.Cars.Update(car);
                 await _context.SaveChangesAsync();
                 return re.Entity;

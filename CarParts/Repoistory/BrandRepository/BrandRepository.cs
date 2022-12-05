@@ -19,6 +19,7 @@ namespace CarParts.Repoistory.BrandRepository
         public async Task<Brand> AddBrand(BrandDto brandDto)
         {
             var brand = _mapper.Map<Brand>(brandDto);
+            brand.CreatedAt = DateTime.Now;
             var result = await _context.Brands.AddAsync(brand);
             return result.Entity;
         }
@@ -46,6 +47,7 @@ namespace CarParts.Repoistory.BrandRepository
         public async Task<Brand> UpdateBrand(BrandDto brandDto)
         {
             var brand = _mapper.Map<Brand>(brandDto);
+            brand.UpdatedAt = DateTime.Now;
             var result = _context.Brands.Update(brand);
             await _context.SaveChangesAsync();
             return result.Entity;
