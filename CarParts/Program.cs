@@ -26,6 +26,7 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IBrandRepository, BrandRepository>();
 
 builder.Services.AddSwaggerGen(option =>
 {
