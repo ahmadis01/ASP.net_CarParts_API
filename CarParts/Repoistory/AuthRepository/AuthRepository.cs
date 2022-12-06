@@ -1,6 +1,5 @@
 ﻿using CarParts.Data;
 using CarParts.Dto.User;
-using CarParts.Interfaces;
 using CarParts.Models.Security;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace CarParts.Repoistory
+namespace CarParts.Repoistory.AuthRepository
 {
     public class AuthRepository : IAuthRepository
     {
@@ -18,7 +17,7 @@ namespace CarParts.Repoistory
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _config;
 
-        public AuthRepository(CarPartContext context ,UserManager<User> userManager , SignInManager<User> signInManager,IConfiguration configuration)
+        public AuthRepository(CarPartContext context, UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
         {
             _context = context;
             _userManager = userManager;
@@ -33,7 +32,7 @@ namespace CarParts.Repoistory
         public async Task<string> Login(LoginUserDto userDto)
         {
             User user = await _userManager.FindByNameAsync(userDto.UserName);
-            var result =await _signInManager.PasswordSignInAsync(userDto.UserName, userDto.Password,false,true);
+            var result = await _signInManager.PasswordSignInAsync(userDto.UserName, userDto.Password, false, true);
             if (result.Succeeded)
             {
                 var token = CreateToken(user);
@@ -53,7 +52,7 @@ namespace CarParts.Repoistory
             User user = new User();
             user.UserName = userDto.UserName;
             user.PhoneNumber = userDto.PhonNumber;
-            var result =await _userManager.CreateAsync(user, userDto.Password);
+            var result = await _userManager.CreateAsync(user, userDto.Password);
             if (result.Succeeded)
                 return CreateToken(user);
             else
@@ -67,7 +66,7 @@ namespace CarParts.Repoistory
                 new Claim(ClaimTypes.Role, "Admin")
             };
 
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                 _config.GetSection("JwtKey").Value));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);

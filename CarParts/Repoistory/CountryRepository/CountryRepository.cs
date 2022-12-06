@@ -1,35 +1,40 @@
-﻿using CarParts.Data;
-using CarParts.Interfaces;
+﻿using AutoMapper;
+using CarParts.Data;
+using CarParts.Dto;
 using CarParts.Models.Main;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarParts.Repoistory
+namespace CarParts.Repoistory.CountryRepository
 {
     public class CountryRepository : ICountryRepository
     {
         private readonly CarPartContext _context;
+        private readonly IMapper _mapper;
 
-        public CountryRepository(CarPartContext context)
+        public CountryRepository(CarPartContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
-        public async Task<Country> AddCountry(Country country)
+        public async Task<Country> AddCountry(CountryDto countryDto)
         {
+            Country country = _mapper.Map<Country>(countryDto);
+            country.CreatedAt = DateTime.Now;
             var result = await _context.AddAsync(country);
             return result.Entity;
         }
 
         public bool DeleteCountry(int id)
         {
-            var country = _context.Countries.FirstOrDefault(c => c.Id == id); 
+            var country = _context.Countries.FirstOrDefault(c => c.Id == id);
             _context.Remove(country);
-            var saved =  _context.SaveChanges();
+            var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
 
         public async Task<IEnumerable<Country>> GetCountries()
         {
-            var countries =await _context.Countries.OrderBy(c => c.Id).ToListAsync();
+            var countries = await _context.Countries.OrderBy(c => c.Id).ToListAsync();
             return countries;
         }
 
@@ -39,8 +44,10 @@ namespace CarParts.Repoistory
             return country;
         }
 
-        public async Task<Country> UpdateCountry(Country country)
+        public async Task<Country> UpdateCountry(CountryDto countryDto)
         {
+            Country country = _mapper.Map<Country>(countryDto);
+            country.UpdatedAt = DateTime.Now;
             var result = _context.Countries.Update(country);
             await _context.SaveChangesAsync();
             return result.Entity;

@@ -9,7 +9,11 @@ namespace CarParts.Helper
         public AutoMapperProfile()
         {
             CreateMap<Car, CarDto>();
+            CreateMap<CarDto, Car>();
             CreateMap<Brand, BrandDto>();
+            CreateMap<BrandDto, Brand>();
+            CreateMap<Country, CountryDto>();
+            CreateMap<CountryDto, Country>();
         }
     }
 }

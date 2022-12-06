@@ -291,8 +291,8 @@ namespace CarParts.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CountryId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -319,7 +319,7 @@ namespace CarParts.Migrations
                     Model = table.Column<int>(type: "int", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: false),
-                    CarCategoryId = table.Column<int>(type: "int", nullable: false),
+                    CarCategoryId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -337,8 +337,7 @@ namespace CarParts.Migrations
                         name: "FK_Cars_CarCategories_CarCategoryId",
                         column: x => x.CarCategoryId,
                         principalTable: "CarCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -445,15 +444,15 @@ namespace CarParts.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "b0a67db0-61d1-42d9-9b56-de6a1231ff9d", "Admin", "ADMIN" },
-                    { 2, "9d4d9d32-8516-4d4c-ba96-4d2aedcf3d23", "Accountant", "ACCOUNTANT" },
-                    { 3, "185dd288-8a7f-4410-8efa-2e038b1527ad", "DataEntry", "DATAENTRY" }
+                    { 1, "40f3055a-f845-4f48-87e9-6cc2a7973cbd", "Admin", "ADMIN" },
+                    { 2, "2fc3ec8b-bbb4-4fc7-8099-d1538f6ae429", "Accountant", "ACCOUNTANT" },
+                    { 3, "c02c918a-f5d8-47a2-a521-c25d521e0777", "DataEntry", "DATAENTRY" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "04c769c5-0d61-4ab5-9312-f5bd15117c18", null, false, false, null, null, "ADMIN", "AQAAAAEAACcQAAAAEA8DSEQtWSV7bM3sr5YsgvxC5zzab51KB9O6o57dxnadla6kKyqm2q1cTrUiWqz3jg==", null, false, null, false, "Admin" });
+                values: new object[] { 1, 0, "8e187170-c951-45b6-933e-d0d4cdfa784f", null, false, false, null, null, "ADMIN", "AQAAAAEAACcQAAAAEOyen7YEmjFize07iBaBdVEfJ/TIZVN9HFlz/n6LCSnvCralQOr9+a5VbBEOLPtr6w==", null, false, null, false, "Admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

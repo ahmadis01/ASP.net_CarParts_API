@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
 using CarParts.Data;
 using CarParts.Dto;
-using CarParts.Interfaces;
 using CarParts.Models.Main;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarParts.Repoistory
+namespace CarParts.Repoistory.BrandRepository
 {
     public class BrandRepository : IBrandRepository
     {
         private readonly CarPartContext _context;
         private readonly IMapper _mapper;
 
-        public BrandRepository(CarPartContext context ,IMapper mapper)
+        public BrandRepository(CarPartContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -20,6 +19,7 @@ namespace CarParts.Repoistory
         public async Task<Brand> AddBrand(BrandDto brandDto)
         {
             var brand = _mapper.Map<Brand>(brandDto);
+            brand.CreatedAt = DateTime.Now;
             var result = await _context.Brands.AddAsync(brand);
             return result.Entity;
         }
@@ -47,6 +47,7 @@ namespace CarParts.Repoistory
         public async Task<Brand> UpdateBrand(BrandDto brandDto)
         {
             var brand = _mapper.Map<Brand>(brandDto);
+            brand.UpdatedAt = DateTime.Now;
             var result = _context.Brands.Update(brand);
             await _context.SaveChangesAsync();
             return result.Entity;

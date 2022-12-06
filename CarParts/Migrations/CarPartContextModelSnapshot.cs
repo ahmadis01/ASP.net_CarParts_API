@@ -40,11 +40,9 @@ namespace CarParts.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -72,7 +70,7 @@ namespace CarParts.Migrations
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CarCategoryId")
+                    b.Property<int?>("CarCategoryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -495,11 +493,11 @@ namespace CarParts.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "04c769c5-0d61-4ab5-9312-f5bd15117c18",
+                            ConcurrencyStamp = "8e187170-c951-45b6-933e-d0d4cdfa784f",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA8DSEQtWSV7bM3sr5YsgvxC5zzab51KB9O6o57dxnadla6kKyqm2q1cTrUiWqz3jg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOyen7YEmjFize07iBaBdVEfJ/TIZVN9HFlz/n6LCSnvCralQOr9+a5VbBEOLPtr6w==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "Admin"
@@ -539,21 +537,21 @@ namespace CarParts.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "b0a67db0-61d1-42d9-9b56-de6a1231ff9d",
+                            ConcurrencyStamp = "40f3055a-f845-4f48-87e9-6cc2a7973cbd",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "9d4d9d32-8516-4d4c-ba96-4d2aedcf3d23",
+                            ConcurrencyStamp = "2fc3ec8b-bbb4-4fc7-8099-d1538f6ae429",
                             Name = "Accountant",
                             NormalizedName = "ACCOUNTANT"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "185dd288-8a7f-4410-8efa-2e038b1527ad",
+                            ConcurrencyStamp = "c02c918a-f5d8-47a2-a521-c25d521e0777",
                             Name = "DataEntry",
                             NormalizedName = "DATAENTRY"
                         });
@@ -690,9 +688,7 @@ namespace CarParts.Migrations
 
                     b.HasOne("CarParts.Models.Main.CarCategory", "CarCategory")
                         .WithMany("Cars")
-                        .HasForeignKey("CarCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CarCategoryId");
 
                     b.Navigation("Brand");
 

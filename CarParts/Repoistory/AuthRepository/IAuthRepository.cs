@@ -1,7 +1,7 @@
 ﻿using CarParts.Dto.User;
 using CarParts.Models.Security;
 
-namespace CarParts.Interfaces
+namespace CarParts.Repoistory.AuthRepository
 {
     public interface IAuthRepository
     {

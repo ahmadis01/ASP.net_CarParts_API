@@ -1,7 +1,5 @@
 using CarParts.Data;
-using CarParts.Interfaces;
 using CarParts.Models.Security;
-using CarParts.Repoistory;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +10,10 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using CarParts.Repoistory.CarRepository;
+using CarParts.Repoistory.BrandRepository;
+using CarParts.Repoistory.CountryRepository;
+using CarParts.Repoistory.AuthRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
+builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddTransient<BrandsSeed>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IBrandRepository, BrandRepository>();
@@ -97,6 +101,20 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+if (args.Length == 1 && args[0].ToLower() == "seed")
+    Seed(app);
+
+//Seed Data
+void Seed(IHost app)
+{
+    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+
+    using (var scope = scopedFactory.CreateScope())
+    {
+        var service = scope.ServiceProvider.GetService<BrandsSeed>();
+        service.SeedData();
+    }
+}
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -113,4 +131,9 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var service = scope.ServiceProvider.GetService<BrandsSeed>();
+    await service.SeedData();
+}
 app.Run();

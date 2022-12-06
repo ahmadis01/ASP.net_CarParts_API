@@ -1,7 +1,7 @@
 ﻿using CarParts.Dto;
 using CarParts.Models.Main;
 
-namespace CarParts.Interfaces
+namespace CarParts.Repoistory.CarRepository
 {
     public interface ICarRepository
     {
@@ -11,7 +11,7 @@ namespace CarParts.Interfaces
         Task<Car> AddCar(CarDto car);
         Task<Car> UpdateCar(CarDto car);
         bool DeleteCar(int id);
-        
+
 
     }
 }
