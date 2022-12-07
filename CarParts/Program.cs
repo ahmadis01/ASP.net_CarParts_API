@@ -43,7 +43,7 @@ builder.Services.AddSwaggerGen(option =>
         Type = SecuritySchemeType.ApiKey,
         BearerFormat = "JWT",
         Scheme = "Bearer"
-
+        
     });
     option.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -97,6 +97,17 @@ builder.Services.AddAuthentication(options =>
                 ValidateAudience = false,
             };
         });
+
+builder.Services.AddCors(o =>
+{
+    o.AddPolicy("Policy", builder =>
+    {
+        builder
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin();
+    });
+});
 #endregion
 
 var app = builder.Build();
@@ -122,6 +133,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("Policy");
 
 app.UseHttpsRedirection();
 
