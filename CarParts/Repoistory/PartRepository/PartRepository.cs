@@ -16,7 +16,7 @@ namespace CarParts.Repoistory.PartRepository
             _context = context;
             _mapper = mapper;
         }
-        public async Task<List<GetPartDto>> GetParts()
+        public async Task<IEnumerable<GetPartDto>> GetParts()
         {
             var parts = await _context.Parts.OrderBy(p => p.Id).ToListAsync();
             var partsDto = _mapper.Map<List<GetPartDto>>(parts);
