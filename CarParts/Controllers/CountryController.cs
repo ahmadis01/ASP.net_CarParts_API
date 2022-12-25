@@ -1,4 +1,4 @@
-﻿using CarParts.Dto;
+﻿using CarParts.Dto.CountryDto;
 using CarParts.Models.Main;
 using CarParts.Repoistory.CountryRepository;
 using Microsoft.AspNetCore.Http;
@@ -29,13 +29,13 @@ namespace CarParts.Controllers
             return Ok(country);
         }
         [HttpPost]
-        public async Task<ActionResult> AddCountry(CountryDto countryDto)
+        public async Task<ActionResult> AddCountry(GetCountryDto countryDto)
         {
             var result =await _countryRepository.AddCountry(countryDto);
             return Ok(result);
         }
         [HttpPut]
-        public async Task<ActionResult> UpdateCountry(CountryDto countryDto)
+        public async Task<ActionResult> UpdateCountry(GetCountryDto countryDto)
         {
             var result = await _countryRepository.UpdateCountry(countryDto);
             return Ok(result);

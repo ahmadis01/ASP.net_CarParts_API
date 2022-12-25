@@ -1,14 +1,14 @@
-﻿using CarParts.Dto;
+﻿using CarParts.Dto.CategoryDto;
 using CarParts.Models.Main;
 
 namespace CarParts.Repoistory.CategoryRepository
 {
     public interface ICategoryRepository
     {
-        Task<IEnumerable<Category>> GetCategories();
-        Task<Category> GetCategory(int id);
-        Task<Category> AddCategory(BrandDto brandDto);
-        Task<Category> UpdateCategory(BrandDto brandDto);
+        Task<IEnumerable<GetCategoryDto>> GetCategories();
+        Task<GetCategoryDto> GetCategory(int id);
+        Task<GetCategoryDto> AddCategory(AddCategoryDto categoryDto);
+        Task<GetCategoryDto> UpdateCategory(UpdateCategoryDto categoryDto);
         bool DeleteCategory(int id);
     }
 }

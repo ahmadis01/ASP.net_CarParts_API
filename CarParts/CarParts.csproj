@@ -21,4 +21,14 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\Cars\" />
+    <Folder Include="wwwroot\Images\CarParts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Images\Brands\photo_2022-06-29_16-11-15.jpg" />
+    <None Include="wwwroot\Images\Brands\ss.jpg" />
+  </ItemGroup>
+
 </Project>

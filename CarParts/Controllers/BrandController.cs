@@ -1,4 +1,4 @@
-﻿using CarParts.Dto;
+﻿using CarParts.Dto.BrandDto;
 using CarParts.Repoistory.BrandRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +32,7 @@ namespace CarParts.Controllers
             return Ok(brand);
         }
         [HttpPost]
-        public async Task<ActionResult> AddBrand(BrandDto brandDto)
+        public async Task<ActionResult> AddBrand([FromForm] AddBrandDto brandDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -40,7 +40,7 @@ namespace CarParts.Controllers
             return Ok(result);
         }
         [HttpPut]
-        public async Task<ActionResult> UpdateBrand(BrandDto brandDto)
+        public async Task<ActionResult> UpdateBrand([FromForm] UpdateBrandDto brandDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

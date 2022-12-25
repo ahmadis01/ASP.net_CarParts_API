@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CarParts.Data;
-using CarParts.Dto;
+using CarParts.Dto.CountryDto;
 using CarParts.Models.Main;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,11 +16,12 @@ namespace CarParts.Repoistory.CountryRepository
             _context = context;
             _mapper = mapper;
         }
-        public async Task<Country> AddCountry(CountryDto countryDto)
+        public async Task<Country> AddCountry(GetCountryDto countryDto)
         {
             Country country = _mapper.Map<Country>(countryDto);
             country.CreatedAt = DateTime.Now;
             var result = await _context.AddAsync(country);
+            await _context.SaveChangesAsync();
             return result.Entity;
         }
 
@@ -44,7 +45,7 @@ namespace CarParts.Repoistory.CountryRepository
             return country;
         }
 
-        public async Task<Country> UpdateCountry(CountryDto countryDto)
+        public async Task<Country> UpdateCountry(GetCountryDto countryDto)
         {
             Country country = _mapper.Map<Country>(countryDto);
             country.UpdatedAt = DateTime.Now;

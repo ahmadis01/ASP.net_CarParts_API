@@ -14,6 +14,8 @@ using CarParts.Repoistory.CarRepository;
 using CarParts.Repoistory.BrandRepository;
 using CarParts.Repoistory.CountryRepository;
 using CarParts.Repoistory.AuthRepository;
+using CarParts.Repoistory.CategoryRepository;
+using CarParts.Repoistory.PartRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,8 @@ builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepoistory>();
+builder.Services.AddScoped<IPartRepository, PartRepository>();
 builder.Services.AddTransient<BrandsSeed>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddHttpContextAccessor();
@@ -71,7 +75,9 @@ builder.Services.AddIdentity<User , IdentityRole<int>>(identity =>
     identity.Password.RequireLowercase = false;
     identity.Password.RequireUppercase = false;
     identity.Password.RequireDigit = false;
-}).AddEntityFrameworkStores<CarPartContext>().AddDefaultTokenProviders();
+})
+    .AddEntityFrameworkStores<CarPartContext>()
+    .AddDefaultTokenProviders();
 
 
     #region  - Jwt -
@@ -123,7 +129,7 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
-
+app.UseStaticFiles();
 app.UseAuthentication();
 
 app.UseAuthorization();
