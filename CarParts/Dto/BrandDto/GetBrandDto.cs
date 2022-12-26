@@ -1,4 +1,7 @@
-﻿namespace CarParts.Dto.BrandDto
+﻿using CarParts.Dto.CountryDto;
+using CarParts.Models.Main;
+
+namespace CarParts.Dto.BrandDto
 {
     public class GetBrandDto
     {

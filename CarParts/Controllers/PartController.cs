@@ -15,16 +15,24 @@ namespace CarParts.Controllers
         {
             _partRepository = partRepository;
         }
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetPart(int id)
-        {
-            if(!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var carPart =await _partRepository.GetPart(id);
-            return Ok(carPart);
-        }
         [HttpGet]
-        public async Task<IActionResult> GetPartByName(string name)
+        public async Task<ActionResult> GetParts()
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var parts = await _partRepository.GetParts();
+            return Ok(parts);
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetPart(int id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var part = await _partRepository.GetPart(id);
+            return Ok(part);
+        }
+        [HttpGet("/api/Part/GetPartByName")]
+        public async Task<ActionResult> GetPartByName(string name)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

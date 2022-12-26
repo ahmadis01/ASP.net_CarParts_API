@@ -1,4 +1,6 @@
-﻿namespace CarParts.Dto.CarDto
+﻿using CarParts.Dto.BrandDto;
+
+namespace CarParts.Dto.CarDto
 {
     public class GetCarDto
     {
