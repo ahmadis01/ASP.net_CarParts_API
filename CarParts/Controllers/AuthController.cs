@@ -31,7 +31,7 @@ namespace CarParts.Controllers
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginUserDto userDto)
         {
-            var result =await _authRepository.Login(userDto);
+            var result = await _authRepository.Login(userDto);
             if (result is null)
                 return Unauthorized();
             else

@@ -1,15 +1,15 @@
-﻿using CarParts.Dto;
+﻿using CarParts.Dto.CarDto;
 using CarParts.Models.Main;
 
 namespace CarParts.Repoistory.CarRepository
 {
     public interface ICarRepository
     {
-        Task<IEnumerable<Car>> GetCars();
-        Task<Car> GetCar(int id);
-        Task<Car> GetCar(string name);
-        Task<Car> AddCar(CarDto car);
-        Task<Car> UpdateCar(CarDto car);
+        Task<IEnumerable<GetCarDto>> GetCars();
+        Task<GetCarDto> GetCar(int id);
+        Task<GetCarDto> GetCar(string name);
+        Task<GetCarDto> AddCar(AddCarDto car);
+        Task<GetCarDto> UpdateCar(UpdateCarDto car);
         bool DeleteCar(int id);
 
 

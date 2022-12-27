@@ -27,7 +27,7 @@ namespace CarParts.Data
         {
             if (!context.Brands.Any())
             {
-                string brandsJson = System.IO.File.ReadAllText(@"Files/brands.json");
+                string brandsJson = System.IO.File.ReadAllText(@"wwwroot/brands.json");
                 List<JsonBrand> brands = JsonSerializer.Deserialize<List<JsonBrand>>(brandsJson);
                 foreach (var brand in brands)
                 {
