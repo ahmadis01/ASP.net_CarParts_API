@@ -1,7 +1,11 @@
-﻿namespace CarParts.Dto
+﻿using CarParts.Dto.CountryDto;
+using CarParts.Models.Main;
+
+namespace CarParts.Dto.BrandDto
 {
-    public class BrandDto
+    public class GetBrandDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Image { get; set; }

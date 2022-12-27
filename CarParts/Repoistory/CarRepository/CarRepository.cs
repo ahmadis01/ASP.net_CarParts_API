@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using CarParts.Data;
-using CarParts.Dto;
+using CarParts.Dto.CarDto;
 using CarParts.Models.Main;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
@@ -11,52 +11,82 @@ namespace CarParts.Repoistory.CarRepository
     {
         private readonly CarPartContext _context;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _environment;
 
-        public CarRepository(CarPartContext context, IMapper mapper)
+        public CarRepository(CarPartContext context, IMapper mapper,IWebHostEnvironment environment)
         {
             _context = context;
             _mapper = mapper;
+            _environment = environment;
         }
 
-        public async Task<Car> AddCar(CarDto carDto)
+        public async Task<GetCarDto> AddCar(AddCarDto carDto)
         {
-            Car car = _mapper.Map<Car>(carDto);
+            var car = _mapper.Map<Car>(carDto);
+            var extension = Path.GetExtension(carDto.Image.FileName);
+            var fileName = DateTime.Now.Ticks.ToString();
+            var path = Path.Combine("wwwroot/Images/Cars", fileName+ extension);
+            car.Image = Path.Combine("/Images/Cars", fileName+ extension);
             car.CreatedAt = DateTime.Now;
+            using (FileStream stream = new FileStream(path, FileMode.Create))
+            {
+                await carDto.Image.CopyToAsync(stream);
+                stream.Close();
+            }
             var result = await _context.Cars.AddAsync(car);
             await _context.SaveChangesAsync();
-            return result.Entity;
+            var getCar = _mapper.Map<GetCarDto>(result.Entity);
+            return getCar;
         }
 
-        public async Task<IEnumerable<Car>> GetCars()
+        public async Task<IEnumerable<GetCarDto>> GetCars()
         {
-            return await _context.Cars.ToListAsync();
+            var cars = await _context.Cars.OrderBy(a => a.Id).ToListAsync();
+            var carsDto = _mapper.Map<List<GetCarDto>>(cars);
+            return carsDto;
         }
-        public async Task<Car> GetCar(int id)
+        public async Task<GetCarDto> GetCar(int id)
         {
-            return await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
+            var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
+            var carDto = _mapper.Map<GetCarDto>(car);
+            return carDto;
         }
-        public async Task<Car> GetCar(string name)
+        public async Task<GetCarDto> GetCar(string name)
         {
-            return await _context.Cars.FirstOrDefaultAsync(c => c.Name == name);
+            var car =  await _context.Cars.FirstOrDefaultAsync(c => c.Name == name);
+            var carDto = _mapper.Map<GetCarDto>(car);
+            return carDto;
         }
 
-        public async Task<Car> UpdateCar(CarDto carDto)
+        public async Task<GetCarDto> UpdateCar(UpdateCarDto carDto)
         {
-            var result = await _context.Cars.FirstOrDefaultAsync(c => c.Id == carDto.Id);
-            if (result != null)
+            Car car = _mapper.Map<Car>(carDto);
+            var oldCar = _context.Cars.AsNoTracking().FirstOrDefaultAsync(c => c.Id == carDto.Id).Result;
+            var oldCarPath =_environment.ContentRootPath.ToString()+"wwwroot"+ oldCar.Image;
+            if(File.Exists(oldCarPath))
+                File.Delete(oldCarPath);
+            var extension = Path.GetExtension(carDto.Image.FileName);
+            var fileName = DateTime.Now.Ticks.ToString();
+            var path = Path.Combine("wwwroot/Images/Cars",fileName+extension);
+            car.Image = Path.Combine("/Images/Cars" , fileName+extension);
+            car.UpdatedAt = DateTime.Now;
+            using(FileStream stream = new FileStream(path, FileMode.Create))
             {
-                Car car = _mapper.Map<Car>(carDto);
-                car.UpdatedAt = DateTime.Now;
-                var re = _context.Cars.Update(car);
-                await _context.SaveChangesAsync();
-                return re.Entity;
+                await carDto.Image.CopyToAsync(stream);
+                stream.Close();
             }
-            return null;
+            var re = _context.Cars.Update(car);
+            await _context.SaveChangesAsync();
+            var getCar = _mapper.Map<GetCarDto>(re.Entity);
+            return getCar;
         }
 
         public bool DeleteCar(int id)
         {
             var car = _context.Cars.FirstOrDefault(c => c.Id == id);
+            var oldCarPath = _environment.ContentRootPath.ToString() + "wwwroot" + car.Image;
+            if (File.Exists(oldCarPath))
+                File.Delete(oldCarPath);
             _context.Remove(car);
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;

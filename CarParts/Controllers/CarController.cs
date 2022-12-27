@@ -1,4 +1,4 @@
-﻿using CarParts.Dto;
+﻿using CarParts.Dto.CarDto;
 using CarParts.Models.Main;
 using CarParts.Models.Security;
 using CarParts.Repoistory.CarRepository;
@@ -44,7 +44,7 @@ namespace CarParts.Controllers
             return Ok(car);
         }
         [HttpPost]
-        public async Task<ActionResult> AddCar([FromForm] CarDto car)
+        public async Task<ActionResult> AddCar([FromForm] AddCarDto car)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -52,7 +52,7 @@ namespace CarParts.Controllers
             return Ok(result);
         }
         [HttpPut]
-        public async Task<ActionResult> UpdateCar([FromForm] CarDto car)
+        public async Task<ActionResult> UpdateCar([FromForm] UpdateCarDto car)
         {
             if (!ModelState.IsValid)
                 return BadRequest();

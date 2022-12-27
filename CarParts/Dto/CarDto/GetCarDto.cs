@@ -1,6 +1,8 @@
-﻿namespace CarParts.Dto
+﻿using CarParts.Dto.BrandDto;
+
+namespace CarParts.Dto.CarDto
 {
-    public class CarDto
+    public class GetCarDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

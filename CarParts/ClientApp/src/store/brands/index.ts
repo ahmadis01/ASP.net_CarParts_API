@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, AnyAction } from '@reduxjs/toolkit';
-import { axiosIns } from '~/libs/axios';
-import { BrandController } from '~/api/Brand';
-import { BrandItem } from '~/api/Brand/dto';
+import { axiosIns } from '@/libs/axios';
+import { BrandController } from '@/api/Brand';
+import { BrandItem } from '@/api/Brand/dto';
 export type BrandsState = {
     brands: BrandItem[]
 }

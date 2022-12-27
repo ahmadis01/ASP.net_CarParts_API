@@ -1,5 +1,10 @@
 ﻿using AutoMapper;
-using CarParts.Dto;
+using CarParts.Dto.BrandDto;
+using CarParts.Dto.CarDto;
+using CarParts.Dto.CarPartsDto;
+using CarParts.Dto.CategoryDto;
+using CarParts.Dto.CountryDto;
+using CarParts.Dto.PartDto;
 using CarParts.Models.Main;
 
 namespace CarParts.Helper
@@ -8,12 +13,29 @@ namespace CarParts.Helper
     {
         public AutoMapperProfile()
         {
-            CreateMap<Car, CarDto>();
-            CreateMap<CarDto, Car>();
-            CreateMap<Brand, BrandDto>();
-            CreateMap<BrandDto, Brand>();
-            CreateMap<Country, CountryDto>();
-            CreateMap<CountryDto, Country>();
+            //Car
+            CreateMap<Car, GetCarDto>();
+            CreateMap<AddCarDto, Car>();
+            CreateMap<UpdateCarDto, Car>();
+            //Branad
+            CreateMap<Brand, GetBrandDto>();
+            CreateMap<AddBrandDto, Brand>();
+            CreateMap<UpdateBrandDto, Brand>();
+            //Country
+            CreateMap<Country, GetCountryDto>();
+            CreateMap<AddCountryDto, Country>();
+            //Category
+            CreateMap<Category, GetCategoryDto>();
+            CreateMap<AddCategoryDto,Category>();
+            CreateMap<UpdateCategoryDto, Category>();
+            //Part
+            CreateMap<Part, GetPartDto >();
+            CreateMap<AddPartDto, Part>();
+            CreateMap<UpdatePartDto, Part>();
+            //CarPart
+            CreateMap<CarPart, GetCarPartDto>();
+            CreateMap<AddCarPartDto, CarPart>();
+            CreateMap<UpdateCarPartDto , CarPart>();
         }
     }
 }
