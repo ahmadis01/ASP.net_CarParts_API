@@ -39,6 +39,12 @@ namespace CarParts.Controllers
             var result = await _carPartRepository.AddCarPart(carPartDto);
             return Ok(result);
         }
+        [HttpPost("/api/CarPart/AddCarPartToNewStore")]
+        public async Task<ActionResult> AddCarPartToNewStore([FromForm] AddCarPartToNewStoreDto carPartDto)
+        {
+            var result = await _carPartRepository.AddCarPartToNewStore(carPartDto);
+            return Ok(result);
+        }
         [HttpPut]
         public async Task<ActionResult> UpdateCarPart([FromForm] UpdateCarPartDto carPartDto)
         {

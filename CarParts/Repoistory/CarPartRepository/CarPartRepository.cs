@@ -21,14 +21,14 @@ namespace CarParts.Repoistory.CarPartRepository
         }
         public async Task<IEnumerable<GetCarPartDto>> GetCarParts()
         {
-            var carParts = await _context.CarParts.OrderBy(c => c.Id).ToListAsync();
+            var carParts = await _context.CarParts.Include(c => c.StoreCPs).OrderBy(c => c.Id).ToListAsync();
             var carPartsDto = _mapper.Map<List<GetCarPartDto>>(carParts);
             return carPartsDto;
         }
 
         public async Task<GetCarPartDto> GetCarPart(int id)
         {
-            var carPart = await _context.CarParts.FirstOrDefaultAsync(c => c.Id == id);
+            var carPart = await _context.CarParts.Include(c => c.StoreCPs).FirstOrDefaultAsync(c => c.Id == id);
             var carPartDto = _mapper.Map<GetCarPartDto>(carPart);
             return carPartDto;
         }
@@ -49,7 +49,26 @@ namespace CarParts.Repoistory.CarPartRepository
             }
             var result = await _context.CarParts.AddAsync(carPart);
             await _context.SaveChangesAsync();
+            var storeCP = new StoreCP();
+            storeCP.CarPartId = result.Entity.Id;
+            storeCP.StoreId = carPartDto.StoreId;
+            storeCP.Quantity = carPartDto.Quantity;
+            var store = await _context.StoreCPs.AddAsync(storeCP);
+            await _context.SaveChangesAsync();
             var getCarPart = _mapper.Map<GetCarPartDto>(result.Entity);
+            return getCarPart;
+        }
+
+        public async Task<GetCarPartDto> AddCarPartToNewStore(AddCarPartToNewStoreDto carPartDto)
+        {
+            var storeCP = new StoreCP();
+            storeCP.CarPartId = carPartDto.CarPartId;
+            storeCP.StoreId = carPartDto.StoreId;
+            storeCP.Quantity = carPartDto.Quantity;
+            var store = await _context.StoreCPs.AddAsync(storeCP);
+            await _context.SaveChangesAsync();
+            var carPart = await GetCarPart(carPartDto.CarPartId);
+            var getCarPart = _mapper.Map<GetCarPartDto>(carPart);
             return getCarPart;
         }
 
@@ -72,6 +91,12 @@ namespace CarParts.Repoistory.CarPartRepository
             }
             var result = _context.CarParts.Update(carPart);
             await _context.SaveChangesAsync();
+            var storeCP = new StoreCP();
+            storeCP.CarPartId = result.Entity.Id;
+            storeCP.StoreId = carPartDto.StoreId;
+            storeCP.Quantity = carPartDto.Quantity;
+            var store = _context.StoreCPs.Update(storeCP);
+            await _context.SaveChangesAsync();
             var getCarPart = _mapper.Map<GetCarPartDto>(result.Entity);
             return getCarPart;
         }
@@ -86,7 +111,5 @@ namespace CarParts.Repoistory.CarPartRepository
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
-
-
     }
 }

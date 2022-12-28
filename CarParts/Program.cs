@@ -17,6 +17,7 @@ using CarParts.Repoistory.AuthRepository;
 using CarParts.Repoistory.CategoryRepository;
 using CarParts.Repoistory.PartRepository;
 using CarParts.Repoistory.CarPartRepository;
+using CarParts.Repoistory.StoreRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,7 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<IBrandRepository, BrandRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepoistory>();
+builder.Services.AddScoped<IStoreRepository, StoreRepository>();
 builder.Services.AddScoped<IPartRepository, PartRepository>();
 builder.Services.AddScoped<ICarPartRepository, CarPartRepository>();
 builder.Services.AddTransient<BrandsSeed>();
