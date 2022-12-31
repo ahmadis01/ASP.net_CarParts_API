@@ -8,5 +8,7 @@ namespace CarParts.Models.Main
         public CarPart CarPart { get; set; }
         public int StoreId { get; set; }
         public Store Store { get; set; }
+        public int Quantity { get; set; }
+
     }
 }

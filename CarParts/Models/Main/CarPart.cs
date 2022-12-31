@@ -10,7 +10,6 @@ namespace CarParts.Models.Main
         public Car Car { get; set; }
         public int BrandId { get; set; }
         public Brand Brand { get; set; }
-        public int Quantity { get; set; }
         public int OrginalPrice { get; set; }
         public int SellingPrice { get; set; }
         public string Image { get; set; }

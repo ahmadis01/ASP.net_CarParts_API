@@ -3,8 +3,11 @@ using CarParts.Dto.BrandDto;
 using CarParts.Dto.CarDto;
 using CarParts.Dto.CarPartsDto;
 using CarParts.Dto.CategoryDto;
+using CarParts.Dto.ClientDto;
 using CarParts.Dto.CountryDto;
 using CarParts.Dto.PartDto;
+using CarParts.Dto.StoreCPDto;
+using CarParts.Dto.StoreDto;
 using CarParts.Models.Main;
 
 namespace CarParts.Helper
@@ -36,6 +39,16 @@ namespace CarParts.Helper
             CreateMap<CarPart, GetCarPartDto>();
             CreateMap<AddCarPartDto, CarPart>();
             CreateMap<UpdateCarPartDto , CarPart>();
+            //Store
+            CreateMap<Store, GetStoreDto>();
+            CreateMap<AddStoreDto, Store>();
+            CreateMap<UpdateStoreDto, Store>();
+            //StoreCP
+            CreateMap<StoreCP, GetStoreCPDto>();
+            //Client
+            CreateMap<Client, GetClientDto>();
+            CreateMap<AddClientDto, Client>();
+            CreateMap<UpdateClientDto,Client>();
         }
     }
 }
