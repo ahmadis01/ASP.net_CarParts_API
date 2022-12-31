@@ -206,7 +206,7 @@ export default function ResponsiveDrawer(props: React.PropsWithChildren & any) {
 
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+        sx={{ flexGrow: 1, p: 0, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
       >
 
         <Toolbar />

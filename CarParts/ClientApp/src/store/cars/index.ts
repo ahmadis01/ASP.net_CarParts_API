@@ -54,4 +54,6 @@ const carSlice = createSlice({
     },
 })
 
+export default carSlice.reducer
+
 

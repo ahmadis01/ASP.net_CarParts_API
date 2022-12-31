@@ -6,6 +6,7 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
 
+
   theme: {
 
     extend: {
@@ -24,6 +25,7 @@ module.exports = {
         },
       }
     },
+
   },
   plugins: [],
 }
