@@ -190,7 +190,6 @@ namespace CarParts.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -271,7 +270,13 @@ namespace CarParts.Migrations
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Coast")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeletedAt")
@@ -279,6 +284,9 @@ namespace CarParts.Migrations
 
                     b.Property<bool>("IsImport")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -333,7 +341,7 @@ namespace CarParts.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -492,11 +500,11 @@ namespace CarParts.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "26ce46ad-e661-4a79-b36b-75b6e5b23b36",
+                            ConcurrencyStamp = "5b2a5ec9-5b5f-49fe-a5cc-49f8e6da975a",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHfRiH+TG+RKg7/GomSjaHObpS7mKu/itDXG88h7M6LOHcxvolMBM+2tG5D652kA1g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECpS6500roKZhLP6oTlKzB6eO9YWrw6r2FJ6EU6ljQA3SIX2Qb+h9MKy9WEiBFanVQ==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "Admin"
@@ -536,21 +544,21 @@ namespace CarParts.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "0c462bac-e845-4509-9fe3-cdac2543336d",
+                            ConcurrencyStamp = "0d931994-4b29-46a9-b82c-d4e337e20fc0",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "9c6c2ce7-d54e-447c-9798-95efcebc4689",
+                            ConcurrencyStamp = "40b191c3-b250-4f03-b426-05dcdeb3b227",
                             Name = "Accountant",
                             NormalizedName = "ACCOUNTANT"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "13cd02bd-6eb7-46a3-9ba7-b4ac00f1e350",
+                            ConcurrencyStamp = "291c5919-a9e3-4533-a409-26b3a66093d8",
                             Name = "DataEntry",
                             NormalizedName = "DATAENTRY"
                         });
@@ -751,9 +759,7 @@ namespace CarParts.Migrations
                 {
                     b.HasOne("CarParts.Models.Main.Category", "Category")
                         .WithMany("Parts")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
                 });

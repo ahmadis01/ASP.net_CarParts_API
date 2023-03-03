@@ -1,12 +1,13 @@
 ﻿using CarParts.Dto.CarPartsDto;
+using CarParts.Parameters;
 
 namespace CarParts.Repoistory.CarPartRepository
 {
     public interface ICarPartRepository
     {
-        Task<IEnumerable<GetCarPartDto>> GetCarParts();
+        Task<IEnumerable<GetCarPartDto>> GetCarParts(CarPartParameters carPartParameters);
         Task<GetCarPartDto> GetCarPart(int id);
-        Task<GetCarPartDto> AddCarPart(AddCarPartDto carPartDto);
+        Task<List<GetCarPartDto>> AddCarPart(AddCarPartDto carPartDto);
         Task<GetCarPartDto> AddCarPartToNewStore(AddCarPartToNewStoreDto carPartDto);
         Task<GetCarPartDto> UpdateCarPart(UpdateCarPartDto carPartDto);
         bool DeleteCarPart(int id);

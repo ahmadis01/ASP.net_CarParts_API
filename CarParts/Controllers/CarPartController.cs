@@ -1,4 +1,5 @@
 ﻿using CarParts.Dto.CarPartsDto;
+using CarParts.Parameters;
 using CarParts.Repoistory.CarPartRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,11 @@ namespace CarParts.Controllers
             _carPartRepository = carPartRepository;
         }
         [HttpGet]
-        public async Task<ActionResult> GetCarParts()
+        public async Task<ActionResult> GetCarParts([FromQuery]CarPartParameters carPartParameters)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            var carParts = await _carPartRepository.GetCarParts();
+            var carParts = await _carPartRepository.GetCarParts(carPartParameters);
             return Ok(carParts);
         }
         [HttpGet("{id}")]

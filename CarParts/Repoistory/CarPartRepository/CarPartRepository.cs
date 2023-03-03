@@ -3,6 +3,7 @@ using CarParts.Data;
 using CarParts.Dto.BrandDto;
 using CarParts.Dto.CarPartsDto;
 using CarParts.Models.Main;
+using CarParts.Parameters;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarParts.Repoistory.CarPartRepository
@@ -19,9 +20,36 @@ namespace CarParts.Repoistory.CarPartRepository
             _mapper = mapper;
             _environment = environment;
         }
-        public async Task<IEnumerable<GetCarPartDto>> GetCarParts()
+        public async Task<IEnumerable<GetCarPartDto>> GetCarParts(CarPartParameters carPartParameters)
         {
-            var carParts = await _context.CarParts.Include(c => c.StoreCPs).OrderBy(c => c.Id).ToListAsync();
+            var carParts = await _context.CarParts.Include(c => c.StoreCPs).Include(c => c.Brand).Include(c => c.Car).OrderBy(c => c.Id).ToListAsync();
+            if (carPartParameters.PartId != 0)
+                carParts = carParts.Where(c => c.PartId == carPartParameters.PartId).ToList();
+
+            if (carPartParameters.CarId != 0)
+                carParts = carParts.Where(c => c.CarId == carPartParameters.CarId).ToList();
+
+            if (carPartParameters.CountryId != 0)
+                carParts = carParts.Where(c => c.Brand.CountryId == carPartParameters.CountryId).ToList();
+
+            if (carPartParameters.BrandId != 0)
+                carParts = carParts.Where(c => c.BrandId == carPartParameters.BrandId).ToList();
+
+            if (carPartParameters.StoreId != 0)
+            {
+                // var storesCPs = await _context.StoreCPs.Where(s => s.StoreId == carPartParameters.StoreId).Include(s => s.CarPart).ToListAsync();
+                /*List<CarPart> parts = new List<CarPart>();
+                foreach (var carPart in carParts)
+                {
+                    var part = carPart.StoreCPs.Where(s => s.StoreId == carPartParameters.StoreId).AsEnumerable();
+                    parts.AddRange(part);
+                }
+                carParts = parts;*/
+            }
+                
+            if (carPartParameters.IsOrginal)
+                carParts = carParts.Where(c => c.Car.BrandId == c.BrandId).ToList();
+
             var carPartsDto = _mapper.Map<List<GetCarPartDto>>(carParts);
             return carPartsDto;
         }
@@ -34,29 +62,40 @@ namespace CarParts.Repoistory.CarPartRepository
         }
 
 
-        public async Task<GetCarPartDto> AddCarPart(AddCarPartDto carPartDto)
+        public async Task<List<GetCarPartDto>> AddCarPart(AddCarPartDto carPartDto)
         {
-            var carPart = _mapper.Map<CarPart>(carPartDto);
-            var fileName = DateTime.Now.Ticks.ToString();
-            var extension = Path.GetExtension(carPartDto.Image.FileName);
-            var path = Path.Combine("wwwroot/Images/CarParts", fileName + extension);
-            carPart.Image = Path.Combine("/Images/CarParts", fileName + extension);
-            carPart.CreatedAt = DateTime.Now;
-            using (FileStream stream = new FileStream(path, FileMode.Create))
+            List<GetCarPartDto> getCarParts = new List<GetCarPartDto>();
+            for (int i = 0; i < carPartDto.CarIds.Count; i++)
             {
-                await carPartDto.Image.CopyToAsync(stream);
-                stream.Close();
+                var carPart = _mapper.Map<CarPart>(carPartDto);
+                carPart.CarId = carPartDto.CarIds[i];
+                carPart.CreatedAt = DateTime.Now;
+                if(i == 0) {
+                    var fileName = DateTime.Now.Ticks.ToString();
+                    var extension = Path.GetExtension(carPartDto.Image.FileName);
+                    var path = Path.Combine("wwwroot/Images/CarParts", fileName + extension);
+                    carPart.Image = Path.Combine("/Images/CarParts", fileName + extension);
+                    using (FileStream stream = new FileStream(path, FileMode.Create))
+                    {
+                        await carPartDto.Image.CopyToAsync(stream);
+                        stream.Close();
+                    }
+                }
+                else
+                {
+                    carPart.Image = getCarParts[i - 1].Image;
+                }
+                var result = await _context.CarParts.AddAsync(carPart);
+                await _context.SaveChangesAsync();
+                var storeCP = new StoreCP();
+                storeCP.CarPartId = result.Entity.Id;
+                storeCP.StoreId = carPartDto.StoreId;
+                storeCP.Quantity = carPartDto.Quantity;
+                var store = await _context.StoreCPs.AddAsync(storeCP);
+                getCarParts.Add(_mapper.Map<GetCarPartDto>(result.Entity)) ;     
             }
-            var result = await _context.CarParts.AddAsync(carPart);
             await _context.SaveChangesAsync();
-            var storeCP = new StoreCP();
-            storeCP.CarPartId = result.Entity.Id;
-            storeCP.StoreId = carPartDto.StoreId;
-            storeCP.Quantity = carPartDto.Quantity;
-            var store = await _context.StoreCPs.AddAsync(storeCP);
-            await _context.SaveChangesAsync();
-            var getCarPart = _mapper.Map<GetCarPartDto>(result.Entity);
-            return getCarPart;
+            return getCarParts;
         }
 
         public async Task<GetCarPartDto> AddCarPartToNewStore(AddCarPartToNewStoreDto carPartDto)

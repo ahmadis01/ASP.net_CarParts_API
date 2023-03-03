@@ -73,7 +73,7 @@ namespace CarParts.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -246,7 +246,7 @@ namespace CarParts.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -258,8 +258,7 @@ namespace CarParts.Migrations
                         name: "FK_Parts_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -268,7 +267,10 @@ namespace CarParts.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsImport = table.Column<bool>(type: "bit", nullable: false),
+                    Coast = table.Column<int>(type: "int", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClientId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -444,15 +446,15 @@ namespace CarParts.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "0c462bac-e845-4509-9fe3-cdac2543336d", "Admin", "ADMIN" },
-                    { 2, "9c6c2ce7-d54e-447c-9798-95efcebc4689", "Accountant", "ACCOUNTANT" },
-                    { 3, "13cd02bd-6eb7-46a3-9ba7-b4ac00f1e350", "DataEntry", "DATAENTRY" }
+                    { 1, "0d931994-4b29-46a9-b82c-d4e337e20fc0", "Admin", "ADMIN" },
+                    { 2, "40b191c3-b250-4f03-b426-05dcdeb3b227", "Accountant", "ACCOUNTANT" },
+                    { 3, "291c5919-a9e3-4533-a409-26b3a66093d8", "DataEntry", "DATAENTRY" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "26ce46ad-e661-4a79-b36b-75b6e5b23b36", null, false, false, null, null, "ADMIN", "AQAAAAEAACcQAAAAEHfRiH+TG+RKg7/GomSjaHObpS7mKu/itDXG88h7M6LOHcxvolMBM+2tG5D652kA1g==", null, false, null, false, "Admin" });
+                values: new object[] { 1, 0, "5b2a5ec9-5b5f-49fe-a5cc-49f8e6da975a", null, false, false, null, null, "ADMIN", "AQAAAAEAACcQAAAAECpS6500roKZhLP6oTlKzB6eO9YWrw6r2FJ6EU6ljQA3SIX2Qb+h9MKy9WEiBFanVQ==", null, false, null, false, "Admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
