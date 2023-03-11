@@ -20,6 +20,7 @@ using CarParts.Repoistory.CarPartRepository;
 using CarParts.Repoistory.StoreRepository;
 using CarParts.Repoistory.ClientRepository;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
