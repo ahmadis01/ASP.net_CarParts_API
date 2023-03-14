@@ -136,9 +136,6 @@ namespace CarParts.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("BrandId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
@@ -148,25 +145,13 @@ namespace CarParts.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OrginalPrice")
-                        .HasColumnType("int");
-
                     b.Property<int>("PartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SellingPrice")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BrandId");
 
                     b.HasIndex("CarId");
 
@@ -267,7 +252,7 @@ namespace CarParts.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("ClientId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<int>("Coast")
@@ -321,6 +306,9 @@ namespace CarParts.Migrations
                     b.Property<int>("StoreCPId")
                         .HasColumnType("int");
 
+                    b.Property<int>("StorePartId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -328,7 +316,7 @@ namespace CarParts.Migrations
 
                     b.HasIndex("InvoiceId");
 
-                    b.HasIndex("StoreCPId");
+                    b.HasIndex("StorePartId");
 
                     b.ToTable("Moves");
                 });
@@ -341,8 +329,15 @@ namespace CarParts.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -353,14 +348,26 @@ namespace CarParts.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrginalPrice")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SellingPrice")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
 
                     b.HasIndex("CategoryId");
 
@@ -393,7 +400,7 @@ namespace CarParts.Migrations
                     b.ToTable("Stores");
                 });
 
-            modelBuilder.Entity("CarParts.Models.Main.StoreCP", b =>
+            modelBuilder.Entity("CarParts.Models.Main.StorePart", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -401,14 +408,14 @@ namespace CarParts.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CarPartId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("PartId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -421,11 +428,11 @@ namespace CarParts.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarPartId");
+                    b.HasIndex("PartId");
 
                     b.HasIndex("StoreId");
 
-                    b.ToTable("StoreCPs");
+                    b.ToTable("StoreParts");
                 });
 
             modelBuilder.Entity("CarParts.Models.Security.User", b =>
@@ -500,11 +507,11 @@ namespace CarParts.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5b2a5ec9-5b5f-49fe-a5cc-49f8e6da975a",
+                            ConcurrencyStamp = "8d5de3c5-a2b0-4d75-bc54-197d41466782",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAECpS6500roKZhLP6oTlKzB6eO9YWrw6r2FJ6EU6ljQA3SIX2Qb+h9MKy9WEiBFanVQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELYCxTFlOwuuELwdjHd+pxYJJy48KdFyfA+iRNFzMTcM070KgRuouqyW3EkaczPxDg==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "Admin"
@@ -544,21 +551,21 @@ namespace CarParts.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "0d931994-4b29-46a9-b82c-d4e337e20fc0",
+                            ConcurrencyStamp = "56df4f54-041a-4456-900f-874050014712",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "40b191c3-b250-4f03-b426-05dcdeb3b227",
+                            ConcurrencyStamp = "49760513-e0e1-4681-a1c4-dfb6577419dd",
                             Name = "Accountant",
                             NormalizedName = "ACCOUNTANT"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "291c5919-a9e3-4533-a409-26b3a66093d8",
+                            ConcurrencyStamp = "1a1ea07c-400b-45cb-b197-cdd6e28cb5b0",
                             Name = "DataEntry",
                             NormalizedName = "DATAENTRY"
                         });
@@ -704,12 +711,6 @@ namespace CarParts.Migrations
 
             modelBuilder.Entity("CarParts.Models.Main.CarPart", b =>
                 {
-                    b.HasOne("CarParts.Models.Main.Brand", "Brand")
-                        .WithMany("CarParts")
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("CarParts.Models.Main.Car", "Car")
                         .WithMany("CarParts")
                         .HasForeignKey("CarId")
@@ -722,8 +723,6 @@ namespace CarParts.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Brand");
-
                     b.Navigation("Car");
 
                     b.Navigation("Part");
@@ -731,9 +730,13 @@ namespace CarParts.Migrations
 
             modelBuilder.Entity("CarParts.Models.Main.Invoice", b =>
                 {
-                    b.HasOne("CarParts.Models.Main.Client", null)
+                    b.HasOne("CarParts.Models.Main.Client", "Client")
                         .WithMany("Invoices")
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("CarParts.Models.Main.Move", b =>
@@ -744,41 +747,49 @@ namespace CarParts.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("CarParts.Models.Main.StoreCP", "StoreCP")
+                    b.HasOne("CarParts.Models.Main.StorePart", "StorePart")
                         .WithMany()
-                        .HasForeignKey("StoreCPId")
+                        .HasForeignKey("StorePartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Invoice");
 
-                    b.Navigation("StoreCP");
+                    b.Navigation("StorePart");
                 });
 
             modelBuilder.Entity("CarParts.Models.Main.Part", b =>
                 {
+                    b.HasOne("CarParts.Models.Main.Brand", "Brand")
+                        .WithMany("Parts")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CarParts.Models.Main.Category", "Category")
                         .WithMany("Parts")
                         .HasForeignKey("CategoryId");
 
+                    b.Navigation("Brand");
+
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("CarParts.Models.Main.StoreCP", b =>
+            modelBuilder.Entity("CarParts.Models.Main.StorePart", b =>
                 {
-                    b.HasOne("CarParts.Models.Main.CarPart", "CarPart")
-                        .WithMany("StoreCPs")
-                        .HasForeignKey("CarPartId")
+                    b.HasOne("CarParts.Models.Main.Part", "Part")
+                        .WithMany("StoreParts")
+                        .HasForeignKey("PartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CarParts.Models.Main.Store", "Store")
-                        .WithMany("StoreCPs")
+                        .WithMany("StoreParts")
                         .HasForeignKey("StoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CarPart");
+                    b.Navigation("Part");
 
                     b.Navigation("Store");
                 });
@@ -838,7 +849,7 @@ namespace CarParts.Migrations
                 {
                     b.Navigation("Car");
 
-                    b.Navigation("CarParts");
+                    b.Navigation("Parts");
                 });
 
             modelBuilder.Entity("CarParts.Models.Main.Car", b =>
@@ -849,11 +860,6 @@ namespace CarParts.Migrations
             modelBuilder.Entity("CarParts.Models.Main.CarCategory", b =>
                 {
                     b.Navigation("Cars");
-                });
-
-            modelBuilder.Entity("CarParts.Models.Main.CarPart", b =>
-                {
-                    b.Navigation("StoreCPs");
                 });
 
             modelBuilder.Entity("CarParts.Models.Main.Category", b =>
@@ -879,11 +885,13 @@ namespace CarParts.Migrations
             modelBuilder.Entity("CarParts.Models.Main.Part", b =>
                 {
                     b.Navigation("CarParts");
+
+                    b.Navigation("StoreParts");
                 });
 
             modelBuilder.Entity("CarParts.Models.Main.Store", b =>
                 {
-                    b.Navigation("StoreCPs");
+                    b.Navigation("StoreParts");
                 });
 #pragma warning restore 612, 618
         }

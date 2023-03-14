@@ -9,7 +9,7 @@ namespace CarParts.Models.Main
         public string? Image { get; set; }
         public int CountryId { get; set; }
         public Country Country { get; set; }
-        public ICollection<CarPart> CarParts { get; set; }
+        public ICollection<Part> Parts { get; set; }
         public ICollection<Car> Car { get; set; }
     }
 }

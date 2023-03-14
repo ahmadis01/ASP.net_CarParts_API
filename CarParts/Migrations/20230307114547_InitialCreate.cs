@@ -239,29 +239,6 @@ namespace CarParts.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Parts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Parts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Parts_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Invoices",
                 columns: table => new
                 {
@@ -271,7 +248,7 @@ namespace CarParts.Migrations
                     IsImport = table.Column<bool>(type: "bit", nullable: false),
                     Coast = table.Column<int>(type: "int", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClientId = table.Column<int>(type: "int", nullable: true),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -283,7 +260,8 @@ namespace CarParts.Migrations
                         name: "FK_Invoices_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -343,13 +321,15 @@ namespace CarParts.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CarParts",
+                name: "Parts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PartId = table.Column<int>(type: "int", nullable: false),
-                    CarId = table.Column<int>(type: "int", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: true),
                     BrandId = table.Column<int>(type: "int", nullable: false),
                     OrginalPrice = table.Column<int>(type: "int", nullable: false),
                     SellingPrice = table.Column<int>(type: "int", nullable: false),
@@ -360,13 +340,35 @@ namespace CarParts.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CarParts", x => x.Id);
+                    table.PrimaryKey("PK_Parts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CarParts_Brands_BrandId",
+                        name: "FK_Parts_Brands_BrandId",
                         column: x => x.BrandId,
                         principalTable: "Brands",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Parts_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CarParts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PartId = table.Column<int>(type: "int", nullable: false),
+                    CarId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CarParts", x => x.Id);
                     table.ForeignKey(
                         name: "FK_CarParts_Cars_CarId",
                         column: x => x.CarId,
@@ -382,12 +384,12 @@ namespace CarParts.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StoreCPs",
+                name: "StoreParts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CarPartId = table.Column<int>(type: "int", nullable: false),
+                    PartId = table.Column<int>(type: "int", nullable: false),
                     StoreId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -396,15 +398,15 @@ namespace CarParts.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StoreCPs", x => x.Id);
+                    table.PrimaryKey("PK_StoreParts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_StoreCPs_CarParts_CarPartId",
-                        column: x => x.CarPartId,
-                        principalTable: "CarParts",
+                        name: "FK_StoreParts_Parts_PartId",
+                        column: x => x.PartId,
+                        principalTable: "Parts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StoreCPs_Stores_StoreId",
+                        name: "FK_StoreParts_Stores_StoreId",
                         column: x => x.StoreId,
                         principalTable: "Stores",
                         principalColumn: "Id",
@@ -419,6 +421,7 @@ namespace CarParts.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     InvoiceId = table.Column<int>(type: "int", nullable: false),
                     StoreCPId = table.Column<int>(type: "int", nullable: false),
+                    StorePartId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -434,9 +437,9 @@ namespace CarParts.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Moves_StoreCPs_StoreCPId",
-                        column: x => x.StoreCPId,
-                        principalTable: "StoreCPs",
+                        name: "FK_Moves_StoreParts_StorePartId",
+                        column: x => x.StorePartId,
+                        principalTable: "StoreParts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -446,15 +449,15 @@ namespace CarParts.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "0d931994-4b29-46a9-b82c-d4e337e20fc0", "Admin", "ADMIN" },
-                    { 2, "40b191c3-b250-4f03-b426-05dcdeb3b227", "Accountant", "ACCOUNTANT" },
-                    { 3, "291c5919-a9e3-4533-a409-26b3a66093d8", "DataEntry", "DATAENTRY" }
+                    { 1, "56df4f54-041a-4456-900f-874050014712", "Admin", "ADMIN" },
+                    { 2, "49760513-e0e1-4681-a1c4-dfb6577419dd", "Accountant", "ACCOUNTANT" },
+                    { 3, "1a1ea07c-400b-45cb-b197-cdd6e28cb5b0", "DataEntry", "DATAENTRY" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "5b2a5ec9-5b5f-49fe-a5cc-49f8e6da975a", null, false, false, null, null, "ADMIN", "AQAAAAEAACcQAAAAECpS6500roKZhLP6oTlKzB6eO9YWrw6r2FJ6EU6ljQA3SIX2Qb+h9MKy9WEiBFanVQ==", null, false, null, false, "Admin" });
+                values: new object[] { 1, 0, "8d5de3c5-a2b0-4d75-bc54-197d41466782", null, false, false, null, null, "ADMIN", "AQAAAAEAACcQAAAAELYCxTFlOwuuELwdjHd+pxYJJy48KdFyfA+iRNFzMTcM070KgRuouqyW3EkaczPxDg==", null, false, null, false, "Admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
@@ -506,11 +509,6 @@ namespace CarParts.Migrations
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CarParts_BrandId",
-                table: "CarParts",
-                column: "BrandId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CarParts_CarId",
                 table: "CarParts",
                 column: "CarId");
@@ -541,9 +539,14 @@ namespace CarParts.Migrations
                 column: "InvoiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Moves_StoreCPId",
+                name: "IX_Moves_StorePartId",
                 table: "Moves",
-                column: "StoreCPId");
+                column: "StorePartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parts_BrandId",
+                table: "Parts",
+                column: "BrandId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Parts_CategoryId",
@@ -551,13 +554,13 @@ namespace CarParts.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StoreCPs_CarPartId",
-                table: "StoreCPs",
-                column: "CarPartId");
+                name: "IX_StoreParts_PartId",
+                table: "StoreParts",
+                column: "PartId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StoreCPs_StoreId",
-                table: "StoreCPs",
+                name: "IX_StoreParts_StoreId",
+                table: "StoreParts",
                 column: "StoreId");
         }
 
@@ -579,6 +582,9 @@ namespace CarParts.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CarParts");
+
+            migrationBuilder.DropTable(
                 name: "Moves");
 
             migrationBuilder.DropTable(
@@ -588,31 +594,28 @@ namespace CarParts.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "Cars");
+
+            migrationBuilder.DropTable(
                 name: "Invoices");
 
             migrationBuilder.DropTable(
-                name: "StoreCPs");
+                name: "StoreParts");
+
+            migrationBuilder.DropTable(
+                name: "CarCategories");
 
             migrationBuilder.DropTable(
                 name: "Clients");
 
             migrationBuilder.DropTable(
-                name: "CarParts");
+                name: "Parts");
 
             migrationBuilder.DropTable(
                 name: "Stores");
 
             migrationBuilder.DropTable(
-                name: "Cars");
-
-            migrationBuilder.DropTable(
-                name: "Parts");
-
-            migrationBuilder.DropTable(
                 name: "Brands");
-
-            migrationBuilder.DropTable(
-                name: "CarCategories");
 
             migrationBuilder.DropTable(
                 name: "Categories");

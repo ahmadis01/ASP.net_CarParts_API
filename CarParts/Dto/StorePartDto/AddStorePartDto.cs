@@ -1,9 +1,8 @@
 ﻿namespace CarParts.Dto.StoreCPDto
 {
-    public class GetStoreCPDto
+    public class AddStorePartDto
     {
+        public int CarPartId { get; set; }
         public int StoreId { get; set; }
-        public int Quantity { get; set; }
-
     }
 }

@@ -7,7 +7,7 @@ namespace CarParts.Models.Main
         public int InvoiceId { get; set; }
         public Invoice Invoice { get; set; }
         public int StoreCPId { get; set; }
-        public StoreCP StoreCP { get; set; }
+        public StorePart StorePart { get; set; }
         public int Quantity { get; set; }
     }
 }

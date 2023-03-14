@@ -17,7 +17,7 @@ namespace CarParts.Controllers
             _carPartRepository = carPartRepository;
         }
         [HttpGet]
-        public async Task<ActionResult> GetCarParts([FromQuery]CarPartParameters carPartParameters)
+        public async Task<ActionResult> GetCarParts([FromQuery]PartParameters carPartParameters)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

@@ -35,7 +35,6 @@ builder.Services.AddScoped<IBrandRepository, BrandRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepoistory>();
 builder.Services.AddScoped<IStoreRepository, StoreRepository>();
 builder.Services.AddScoped<IPartRepository, PartRepository>();
-builder.Services.AddScoped<ICarPartRepository, CarPartRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddTransient<BrandsSeed>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);

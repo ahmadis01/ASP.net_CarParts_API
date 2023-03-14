@@ -64,7 +64,7 @@ namespace CarParts.Data
         public DbSet<Move> Moves { get; set; }
         public DbSet<Part> Parts { get; set; }
         public DbSet<Store> Stores { get; set; }
-        public DbSet<StoreCP> StoreCPs { get; set; }
+        public DbSet<StorePart> StoreParts { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<CarCategory> CarCategories { get; set; }
         #endregion   
