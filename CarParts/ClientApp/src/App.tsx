@@ -21,8 +21,9 @@ import { BrandItem } from './api/Brand/dto';
 import { CountryItem } from './api/Country/dto';
 import { CountryActions } from './store/countries';
 import { CountryApi } from './api/Country';
-const queryClient = new QueryClient()
+import { SERVER_URL } from '../app.config';
 const stylisPlugins = [prefixer];
+const queryClient = new QueryClient()
 const htmlDir = document.querySelector('html');
 if (htmlDir?.dir === 'rtl') {
   stylisPlugins.push(rtlPlugin)
@@ -82,6 +83,9 @@ function App() {
 
         </QueryClientProvider>
       </ThemeProvider>
+      <div className="fixed bottom-4 right-4  z-[10000]  text-white">
+        <a href={`${SERVER_URL}/swagger/index.html`} target='_blank'>Swagger Api</a>
+      </div>
     </div>
   );
 }
