@@ -5,6 +5,7 @@ using CarParts.Dto.PartDto;
 using CarParts.Models.Main;
 using CarParts.Parameters;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace CarParts.Repoistory.PartRepository
 {
@@ -23,32 +24,15 @@ namespace CarParts.Repoistory.PartRepository
         }
         public async Task<IEnumerable<GetPartDto>> GetParts(PartParameters parameters)
         {
-            var parts = new List<Part>();
-            if(parameters.PageSize != 0 && parameters.PageNumber !=0 )
-            {
-                parts = await _context.Parts
-                    .OrderBy(p => p.Id)
-                    .Include(p => p.CarParts).Include(p => p.StoreParts)
-                    .Skip((parameters.PageNumber -1) * parameters.PageSize)
-                    .Take(parameters.PageSize)
-                    .ToListAsync();
-            }
-            else
-            {
-                parts = await _context.Parts
-                    .OrderBy(p => p.Id)
-                    .Include(p => p.CarParts).Include(p => p.StoreParts)
-                    .ToListAsync();
-            }
-            if(parameters.CountryId != 0)
-            {
-                parts = parts.Where(p => p.Brand.CountryId == parameters.CountryId).ToList();
-            }
-            
+            List<Part> parts;
+            parts = await Pagination(parameters);
+            parts = Filter(parameters, parts);
+
             if (!String.IsNullOrEmpty(parameters.Search.Trim()))
             {
                 parts = parts.Where(p => p.Name.Contains(parameters.Search)).ToList();
             }
+
             var partsDto = _mapper.Map<List<GetPartDto>>(parts);
             return partsDto;
         }
@@ -82,6 +66,7 @@ namespace CarParts.Repoistory.PartRepository
             storePart.PartId = partRes.Entity.Id;
             storePart.StoreId = partDto.StoreId;
             storePart.Quantity = partDto.Quantity;
+
             await _context.StoreParts.AddAsync(storePart);
             await _context.SaveChangesAsync();
             var getPart = _mapper.Map<GetPartDto>(part);
@@ -139,6 +124,67 @@ namespace CarParts.Repoistory.PartRepository
             await _context.SaveChangesAsync();
             var getPart = _mapper.Map<GetPartDto>(result.Entity);
             return getPart;
+        }
+        public List<Part> Filter(PartParameters parameters , List<Part> parts)
+        {
+
+            if (parameters.CountryId != 0)
+            {
+                parts = parts.Where(p => p.Brand.CountryId == parameters.CountryId).ToList();
+            }
+            if (parameters.BrandId != 0)
+            {
+                parts = parts.Where(p => p.BrandId == parameters.BrandId).ToList();
+            }
+            if (parameters.StoreId != 0)
+            {
+                var stores = _context.StoreParts.Where(s => s.StoreId == parameters.StoreId).ToList();
+                foreach (var store in stores)
+                {
+                    parts = parts.Where(p => p.Id == store.PartId).ToList();
+                }
+            }
+            if (!String.IsNullOrEmpty(parameters.OrderBy))
+            {
+                switch (parameters.OrderBy)
+                {
+                    case "name":
+                        parts = parts.OrderBy(p => p.Name).ToList();
+                        break;
+                    case "price":
+                        parts = parts.OrderBy(p => p.SellingPrice).ToList();
+                        break;
+                    case "date":
+                        parts = parts.OrderBy(p => p.CreatedAt).ToList();
+                        break;
+                }
+            }
+            if(parameters.OrderStatus.ToLower() == "desc")
+            {
+                parts.Reverse();
+            }
+            return parts;
+        }
+        public async Task<List<Part>> Pagination(PartParameters parameters)
+        {
+            var parts = new List<Part>();
+            if (parameters.PageSize != 0 && parameters.PageNumber != 0)
+            {
+                parts = await _context.Parts
+                    .OrderBy(p => p.Id)
+                    .Include(p => p.CarParts).Include(p => p.StoreParts)
+                    .Skip((parameters.PageNumber - 1) * parameters.PageSize)
+                    .Take(parameters.PageSize)
+                    .ToListAsync();
+            }
+            else
+            {
+                parts = await _context.Parts
+                    .OrderBy(p => p.Id)
+                    .Include(p => p.CarParts).Include(p => p.StoreParts)
+                    .ToListAsync();
+            }
+            return parts;
         }
     }
 }

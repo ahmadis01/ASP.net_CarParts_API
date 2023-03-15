@@ -14,9 +14,8 @@ namespace CarParts.Parameters
         public int StoreId { get; set; } = 0;
         public int PageSize { get; set; }
         public int PageNumber { get; set; } 
-        public bool IsOrginal { get; set; }
         public string OrderBy { get; set; } = "id";
-        public string OrderStatus { get; set; } = "desc";
+        public string OrderStatus { get; set; } = "asc";
         public DateTime Date { get; set; }
         public string Search { get; set; } = string.Empty;
 
