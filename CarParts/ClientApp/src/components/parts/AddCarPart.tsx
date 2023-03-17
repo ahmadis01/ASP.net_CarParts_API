@@ -1,48 +1,50 @@
 import { BrandItem } from '@/api/Brand/dto'
 import { GetAllCar } from '@/api/Car/dto'
-import { CarPartApi } from '@/api/CarPart'
-import { AddCarPartDto } from '@/api/CarPart/dto.ts'
+import { CategoryItem } from '@/api/Category/dto'
 import { InventoryItem } from '@/api/Inventory/dto'
-import { GetPartsDTO } from '@/api/Part/dto'
-import { RootState } from '@/store'
-import { Add, CheckBox, Close } from '@mui/icons-material'
+import { PartApi } from '@/api/Part'
+import { AddPartDTO } from '@/api/Part/dto'
+import { Add, Close, } from '@mui/icons-material'
 import { Button, Dialog, DialogContent, DialogTitle, FormControl, FormLabel, IconButton, InputLabel, MenuItem, Modal, Select, TextField } from '@mui/material'
 import { Box } from '@mui/system'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useMutation } from 'react-query'
-import { useSelector } from 'react-redux'
+import Upload from '../Upload'
 interface PropsType {
     cars: GetAllCar[],
     brands: BrandItem[],
     inventories: InventoryItem[],
+    categories: CategoryItem[]
 }
 export default function AddPart(props: PropsType) {
-    const { control, } = useForm<AddCarPartDto>({
-        defaultValues: { ... new AddCarPartDto() },
+    const { control, handleSubmit, setValue } = useForm<AddPartDTO>({
+        defaultValues: { ... new AddPartDTO() },
 
     })
-    const parts = useSelector<RootState, GetPartsDTO[]>(s => s.part.parts)
 
+    const [imageUrl, setImageUrl] = useState('')
     const [open, setOpen] = useState(false)
 
 
     const mutation = useMutation('carPart', {
-        mutationFn: CarPartApi.AddCarPart,
+        mutationFn: PartApi.addPart,
         onSuccess: () => console.log('test')
-
     })
 
-    const onSubmit = () => mutation.mutate()
+    const onSubmit = (values: AddPartDTO) => {
+        console.log(values)
+        mutation.mutate(values)
+    }
 
     return (
         <>
             <Button onClick={() => setOpen(true)} variant='contained'>
-                إضافة قطعة لسيارة
+                إضافة قطعة جديدة
                 <Add />
             </Button>
-            <Dialog maxWidth='xl' open={open}>
-                <form>
+            <Dialog maxWidth='md' fullWidth open={open}>
+                <form onSubmit={handleSubmit(onSubmit)}>
 
                     <Box display={'flex'} paddingRight={2} justifyContent={'space-between'} alignItems={'center'}>
 
@@ -50,13 +52,55 @@ export default function AddPart(props: PropsType) {
                         <IconButton onClick={() => setOpen(false)}><Close /></IconButton>
                     </Box>
 
-                    <DialogContent sx={{ minWidth: '700px' }} >
+                    <DialogContent   >
 
-                        <Box className='grid grid-cols-2' paddingY={2} gap={2}>
-                            <Controller rules={{ required: ' يرجى اختيار السيارات المرتبطة بالقطعة' }} name='carId' control={control} render={({ field, fieldState }) =>
-                                <FormControl  >
+                        <Box className='grid grid-cols-12' paddingY={2} gap={2}>
+
+                            <Controller name='name' rules={{ required: true }} control={control} render={({ field, fieldState }) =>
+
+                                <TextField className='col-span-6' {...field} label='اسم القطعة'></TextField>
+
+                            } />
+                            <Controller name='code' rules={{ required: true }} control={control} render={({ field, fieldState }) =>
+
+                                <TextField className='col-span-6' {...field} label='رمز القطعة'></TextField>
+
+                            } />
+
+
+
+                            <Controller name='categoryId' control={control} render={({ field, fieldState }) =>
+
+
+                                <FormControl className='col-span-6' >
+                                    <InputLabel id='carCategory'>تصنيف القطعة</InputLabel>
+                                    <Select {...field} label='تصنيف القطعة' labelId='carCategory'>
+
+                                        {
+                                            props.categories.map(p => <MenuItem value={p.id} key={p.id}>{p.name}</MenuItem>)
+                                        }
+
+                                    </Select>
+                                </FormControl>
+                            } />
+
+                            <Controller name='brandId' control={control} render={({ field }) =>
+                                <FormControl className='col-span-6' >
+                                    <InputLabel id='brandid'>الشركة المصنعة</InputLabel>
+                                    <Select {...field} label='الشركة المصنعة' labelId='brandid'>
+                                        {
+                                            props.brands.map(b => <MenuItem value={b.id} key={b.id}>{b.name}</MenuItem>)
+                                        }
+
+                                    </Select>
+                                </FormControl>
+                            } />
+
+
+                            <Controller rules={{ required: ' يرجى اختيار السيارات المرتبطة بالقطعة' }} name='carIds' control={control} render={({ field, fieldState }) =>
+                                <FormControl className='col-span-6'   >
                                     <InputLabel id='carType'>السيارات المرتبطة بالقطعة</InputLabel>
-                                    <Select {...field} multiple label='السيارات المرتبطة بالقطعة' labelId='carType'>
+                                    <Select   {...field} multiple label='السيارات المرتبطة بالقطعة' labelId='carType'>
 
                                         {
                                             props.cars.map(c => <MenuItem value={c.id} key={c.id}>{c.name}</MenuItem>)
@@ -68,61 +112,65 @@ export default function AddPart(props: PropsType) {
 
 
 
-                            <Controller rules={{ required: 'يرجى اختيار نوع القطعة' }} name='partId' control={control} render={({ field, fieldState }) =>
+                            <Controller rules={{ required: 'يرجى اختيار المتجر الذي تتوفر فيه القطعة' }} name='storeId' control={control} render={({ field, fieldState }) =>
 
-
-                                <FormControl >
-                                    <InputLabel id='carType'>نوع القطعة</InputLabel>
-                                    <Select {...field} label='نوع القطعة' labelId='carType'>
+                                <FormControl className='col-span-6' >
+                                    <InputLabel id='storId'>إضافة للمستودع</InputLabel>
+                                    <Select {...field} label='إضافة للمستودع' labelId='storId' >
 
                                         {
-                                            parts.map(p => <MenuItem key={p.id}>{p.name}</MenuItem>)
+                                            props.inventories.map(p => <MenuItem value={p.id} key={p.id}>{p.location}</MenuItem>)
                                         }
 
                                     </Select>
                                 </FormControl>
                             } />
 
-                            <FormControl >
-                                <InputLabel id='carType'>الشركة المصنعة</InputLabel>
-                                <Select label='الشركة المصنعة' labelId='carType'>
-
-                                    {
-                                        props.brands.map(b => <MenuItem key={b.id}>{b.name}</MenuItem>)
-                                    }
-
-                                </Select>
-                            </FormControl>
 
 
 
+                            <Controller name='orginalPrice' rules={{ required: true }} control={control} render={({ field, fieldState }) =>
+
+                                <TextField type='number' className='col-span-4' {...field} label='السعر الأصلي'></TextField>
+
+                            } />
+                            <Controller name='sellingPrice' rules={{ required: true }} control={control} render={({ field, fieldState }) =>
+
+                                <TextField type='number' className='col-span-4' {...field} label='سعر المبيع'></TextField>
+
+                            } />
+                            <Controller name='quantity' rules={{ required: true }} control={control} render={({ field, fieldState }) =>
+
+                                <TextField type='number' className='col-span-4' {...field} label='الكمية'></TextField>
+
+                            } />
 
 
+                            <Controller name='description' rules={{ required: true }} control={control} render={({ field, fieldState }) =>
+
+                                <TextField
+
+                                    multiline
+                                    rows={3}
+                                    className='col-span-6'
+                                    {...field} label='الوصف'></TextField>
 
 
+                            } />
+                            <div className='col-span-6'>
 
-                            <FormControl >
-                                <InputLabel id='carType'>إضافة للمستودع</InputLabel>
-                                <Select label='إضافة للمستودع' labelId='carType'>
+                                {/* <Controller control={control} name='partImage' render={({ field }) => */}
 
-                                    {
-                                        parts.map(p => <MenuItem key={p.id}>{p.name}</MenuItem>)
-                                    }
+                                <Upload name='image' url={imageUrl} onChange={event => {
+                                    console.log(event)
+                                    setValue('image', event.file);
+                                    setImageUrl(event.src)
+                                }}></Upload>
 
-                                </Select>
-                            </FormControl>
+                                {/* } /> */}
+                            </div>
 
-
-
-
-                            <TextField label='السعر الأصلي' type='number'></TextField>
-
-                            <TextField label='سعر المبيع' type='number'></TextField>
-
-
-
-
-                            <Button className='col-span-2 ' sx={{ borderRadius: 2.5, padding: 1.5 }} variant='contained' >حفظ القطعة</Button>
+                            <Button className='col-span-12' variant='contained' type='submit' >حفظ القطعة</Button>
                         </Box>
 
                     </DialogContent>

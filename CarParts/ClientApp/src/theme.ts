@@ -6,6 +6,7 @@ import { createTheme } from "@mui/material";
 export const customTheme = createTheme({
     palette: {
         mode: 'light',
+        
         primary: {
             100: "#d7dffb",
             200: "#afc0f6",

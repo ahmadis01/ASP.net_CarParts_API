@@ -1,4 +1,4 @@
 export interface InventoryItem {
-    name: string,
+    location: string,
     id: number,
 }
