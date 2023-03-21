@@ -3,64 +3,87 @@ using CarParts.Data;
 using CarParts.Dto.InvoiceDto;
 using CarParts.Models.Main;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace CarParts.Repoistory.InvoiceRepository
 {
     public class InvoiceRepository : IInvoiceRepository
     {
-        private readonly CarPartContext context;
-        private readonly IMapper mapper;
-
+        private readonly CarPartContext _context;
+        private readonly IMapper _mapper;
         public InvoiceRepository(CarPartContext context , IMapper mapper)
         {
-            this.context = context;
-            this.mapper = mapper;
+            _context = context;
+            _mapper = mapper;
         }
         public async Task<IEnumerable<GetInvoiceDto>> GetInvoices()
         {
-            var invoices = await context.Invoices.OrderBy(i => i.Id).ToListAsync();
-            var invoicesDto = mapper.Map<List<GetInvoiceDto>>(invoices);
+            var invoices = await _context.Invoices.OrderBy(i => i.Id).ToListAsync();
+            var invoicesDto = _mapper.Map<List<GetInvoiceDto>>(invoices);
             return invoicesDto;
         }
 
         public async Task<GetInvoiceDto> GetInvoice(int id)
         {
-            var invoice = await context.Invoices.FirstOrDefaultAsync(i => i.Id == id);
-            var invoiceDto = mapper.Map<GetInvoiceDto>(invoice);
+            var invoice = await _context.Invoices.FirstOrDefaultAsync(i => i.Id == id);
+            var invoiceDto = _mapper.Map<GetInvoiceDto>(invoice);
             return invoiceDto;
         }
 
         public async Task<IEnumerable<GetInvoiceDto>> GetInvoiceByClient(int clientId)
         {
-            var invoices = await context.Invoices.Where(i=>i.ClientId  == clientId).ToListAsync();
-            var invoicesDto = mapper.Map<List<GetInvoiceDto>>(invoices);
+            var invoices = await _context.Invoices.Where(i=>i.ClientId  == clientId).ToListAsync();
+            var invoicesDto = _mapper.Map<List<GetInvoiceDto>>(invoices);
             return invoicesDto;
         }
 
         public async Task<GetInvoiceDto> AddInvoice(AddInvoiceDto invoiceDto)
         {
-            var invoice = mapper.Map<Invoice>(invoiceDto);
+            var invoice = _mapper.Map<Invoice>(invoiceDto);
             invoice.CreatedAt = DateTime.Now;
-            var result = await context.Invoices.AddAsync(invoice);
-            await context.SaveChangesAsync();
-            var getInvoice = mapper.Map<GetInvoiceDto>(result.Entity);
+            var parts = invoiceDto.Parts;
+            Move move = new Move();
+
+            Console.WriteLine("hello" + invoiceDto.Parts.Count);
+            var result = await _context.Invoices.AddAsync(invoice);
+            await _context.SaveChangesAsync();
+            foreach (var part in invoiceDto.Parts)
+            {
+                Console.WriteLine("hello");
+                move.InvoiceId = result.Entity.Id;
+                move.Price = part.Price;
+                move.CreatedAt = DateTime.Now;
+                move.Quantity = part.Quantity;
+                var storePart = _context.StoreParts.Where(s => s.PartId == part.PartId && s.StoreId == part.StoreId).FirstOrDefaultAsync().Result;
+                if (invoice.IsImport)
+                    storePart.Quantity -= part.Quantity;
+                else
+                    storePart.Quantity += part.Quantity;
+                move.StorePartId = storePart.Id;
+                await _context.Moves.AddAsync(move);
+                await _context.SaveChangesAsync();
+                _context.StoreParts.Update(storePart);
+                await _context.SaveChangesAsync();
+
+            }
+            var getInvoice = _mapper.Map<GetInvoiceDto>(result.Entity);
             return getInvoice;
         }
 
         public async Task<GetInvoiceDto> UpdateInvoice(UpdateInvoiceDto invoiceDto)
         {
-            var invoice = mapper.Map<Invoice>(invoiceDto);
+            var invoice = _mapper.Map<Invoice>(invoiceDto);
             invoice.UpdatedAt = DateTime.Now;
-            var result = context.Update(invoice);
-            await context.SaveChangesAsync();
-            var getInvoice = mapper.Map<GetInvoiceDto>(result.Entity);
+            var result = _context.Update(invoice);
+            await _context.SaveChangesAsync();
+            var getInvoice = _mapper.Map<GetInvoiceDto>(result.Entity);
             return getInvoice;
         }
         public bool DeleteInvoice(int id)
         {
-            var invoice = context.Invoices.FirstOrDefault(i => i.Id == id);
-            context.Remove(invoice);
-            var saved = context.SaveChanges();
+            var invoice = _context.Invoices.FirstOrDefault(i => i.Id == id);
+            _context.Remove(invoice);
+            var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
     }

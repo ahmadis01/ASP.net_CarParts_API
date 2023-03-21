@@ -83,7 +83,6 @@ namespace CarParts.Repoistory.PartRepository
             var result = _context.SaveChanges();
             return result > 0 ? true : false;
         }
-
         public async Task<GetPartDto> GetPart(int id)
         {
             var part = await _context.Parts.Include(p => p.CarParts)
@@ -102,7 +101,6 @@ namespace CarParts.Repoistory.PartRepository
             var partDto = _mapper.Map<List<GetPartDto>>(part);
             return partDto;
         }
-
         public async Task<GetPartDto> UpdatePart(UpdatePartDto partDto)
         {
             var oldPart = _context.Parts.AsNoTracking().FirstOrDefaultAsync(b => b.Id == partDto.Id).Result;

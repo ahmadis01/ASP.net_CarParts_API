@@ -249,6 +249,7 @@ namespace CarParts.Migrations
                     Coast = table.Column<int>(type: "int", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClientId = table.Column<int>(type: "int", nullable: false),
+                    Services = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -420,9 +421,9 @@ namespace CarParts.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     InvoiceId = table.Column<int>(type: "int", nullable: false),
-                    StoreCPId = table.Column<int>(type: "int", nullable: false),
                     StorePartId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -449,15 +450,15 @@ namespace CarParts.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "56df4f54-041a-4456-900f-874050014712", "Admin", "ADMIN" },
-                    { 2, "49760513-e0e1-4681-a1c4-dfb6577419dd", "Accountant", "ACCOUNTANT" },
-                    { 3, "1a1ea07c-400b-45cb-b197-cdd6e28cb5b0", "DataEntry", "DATAENTRY" }
+                    { 1, "ddbd3fda-e05a-4b74-af27-ec18e7a214a2", "Admin", "ADMIN" },
+                    { 2, "98002259-9560-4bfa-ad0e-1e6d7a33d228", "Accountant", "ACCOUNTANT" },
+                    { 3, "15f1f1a2-2741-4fd7-b6d6-b90cadb955e9", "DataEntry", "DATAENTRY" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "8d5de3c5-a2b0-4d75-bc54-197d41466782", null, false, false, null, null, "ADMIN", "AQAAAAEAACcQAAAAELYCxTFlOwuuELwdjHd+pxYJJy48KdFyfA+iRNFzMTcM070KgRuouqyW3EkaczPxDg==", null, false, null, false, "Admin" });
+                values: new object[] { 1, 0, "2bae4819-f5bd-44aa-8ff5-15a7614fa2c2", null, false, false, null, null, "ADMIN", "AQAAAAEAACcQAAAAEAL4kVjo/KSuEX4HutO1YwML2OlQcAKABgaPiuLVH3V0PmznSmyHRjW5QxAY78rAJg==", null, false, null, false, "Admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
