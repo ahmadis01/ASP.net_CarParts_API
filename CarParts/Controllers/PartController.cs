@@ -32,14 +32,6 @@ namespace CarParts.Controllers
             var part = await _partRepository.GetPart(id);
             return Ok(part);
         }
-        [HttpGet("/api/Part/GetPartByName")]
-        public async Task<ActionResult> GetPartByName(string name)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-            var part = await _partRepository.GetPart(name);
-            return Ok(part);
-        }
         [HttpPost]
         public async Task<ActionResult> AddPart([FromForm] AddPartDto partDto)
         {

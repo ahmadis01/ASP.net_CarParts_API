@@ -16,7 +16,6 @@ using CarParts.Repoistory.CountryRepository;
 using CarParts.Repoistory.AuthRepository;
 using CarParts.Repoistory.CategoryRepository;
 using CarParts.Repoistory.PartRepository;
-using CarParts.Repoistory.CarPartRepository;
 using CarParts.Repoistory.StoreRepository;
 using CarParts.Repoistory.ClientRepository;
 using CarParts.Repoistory.InvoiceRepository;
