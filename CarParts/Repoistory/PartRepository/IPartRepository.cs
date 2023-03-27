@@ -5,11 +5,10 @@ namespace CarParts.Repoistory.PartRepository
 {
     public interface IPartRepository
     {
-        Task<IEnumerable<GetPartDto>> GetParts(PartParameters parameters);
-        Task<GetPartDto> GetPart(int id);
-        Task<List<GetPartDto>> GetPart(string name);
-        Task<GetPartDto> AddPart(AddPartDto partDto);
-        Task<GetPartDto> UpdatePart(UpdatePartDto partDto);
+        Task<GetPartDto> GetParts(PartParameters parameters);
+        Task<GetPartData> GetPart(int id);
+        Task<GetPartData> AddPart(AddPartDto partDto);
+        Task<GetPartData> UpdatePart(UpdatePartDto partDto);
         bool DeletePart(int id);
 
     }

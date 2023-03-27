@@ -22,7 +22,7 @@ namespace CarParts.Repoistory.PartRepository
             _mapper = mapper;
             _environment = environment;
         }
-        public async Task<IEnumerable<GetPartDto>> GetParts(PartParameters parameters)
+        public async Task<GetPartDto> GetParts(PartParameters parameters)
         {
             List<Part> parts;
             parts = await Pagination(parameters);
@@ -33,10 +33,15 @@ namespace CarParts.Repoistory.PartRepository
                 parts = parts.Where(p => p.Name.Contains(parameters.Search)).ToList();
             }
 
-            var partsDto = _mapper.Map<List<GetPartDto>>(parts);
-            return partsDto;
+            var partsDto = _mapper.Map<List<GetPartData>>(parts);
+            foreach (var partDto in partsDto)
+                partDto.Cars = _context.CarParts.Where(c => c.PartId == partDto.Id).Select(c => c.CarId).ToList();
+            var partsData = new GetPartDto();
+            partsData.Parts = partsDto;
+            partsData.TotalNumber = _context.Parts.Count();
+            return partsData;
         }
-        public async Task<GetPartDto> AddPart(AddPartDto partDto)
+        public async Task<GetPartData> AddPart(AddPartDto partDto)
         {
             var part = _mapper.Map<Part>(partDto);            
             part.CreatedAt = DateTime.Now;
@@ -69,7 +74,7 @@ namespace CarParts.Repoistory.PartRepository
 
             await _context.StoreParts.AddAsync(storePart);
             await _context.SaveChangesAsync();
-            var getPart = _mapper.Map<GetPartDto>(part);
+            var getPart = _mapper.Map<GetPartData>(part);
             return getPart;
         }
 
@@ -83,27 +88,15 @@ namespace CarParts.Repoistory.PartRepository
             var result = _context.SaveChanges();
             return result > 0 ? true : false;
         }
-
-        public async Task<GetPartDto> GetPart(int id)
+        public async Task<GetPartData> GetPart(int id)
         {
             var part = await _context.Parts.Include(p => p.CarParts)
                 .Include(p => p.StoreParts)
                 .FirstOrDefaultAsync(c => c.Id == id);
-            var partDto = _mapper.Map<GetPartDto>(part);
+            var partDto = _mapper.Map<GetPartData>(part);
             return partDto;       
         }
-
-        public async Task<List<GetPartDto>> GetPart(string name)
-        {
-            var part = await _context.Parts.Include(p => p.CarParts)
-                .Include(p => p.StoreParts)
-                .Where(p => p.Name.Contains(name))
-                .ToListAsync();
-            var partDto = _mapper.Map<List<GetPartDto>>(part);
-            return partDto;
-        }
-
-        public async Task<GetPartDto> UpdatePart(UpdatePartDto partDto)
+        public async Task<GetPartData> UpdatePart(UpdatePartDto partDto)
         {
             var oldPart = _context.Parts.AsNoTracking().FirstOrDefaultAsync(b => b.Id == partDto.Id).Result;
             var oldPartDto = _environment.ContentRootPath.ToString() + "wwwroot" + oldPart.Image;
@@ -122,7 +115,7 @@ namespace CarParts.Repoistory.PartRepository
             }
             var result = _context.Parts.Update(part);
             await _context.SaveChangesAsync();
-            var getPart = _mapper.Map<GetPartDto>(result.Entity);
+            var getPart = _mapper.Map<GetPartData>(result.Entity);
             return getPart;
         }
         public List<Part> Filter(PartParameters parameters , List<Part> parts)
@@ -172,7 +165,7 @@ namespace CarParts.Repoistory.PartRepository
             {
                 parts = await _context.Parts
                     .OrderBy(p => p.Id)
-                    .Include(p => p.CarParts).Include(p => p.StoreParts)
+                    .Include(p => p.StoreParts)
                     .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                     .Take(parameters.PageSize)
                     .ToListAsync();
@@ -181,7 +174,7 @@ namespace CarParts.Repoistory.PartRepository
             {
                 parts = await _context.Parts
                     .OrderBy(p => p.Id)
-                    .Include(p => p.CarParts).Include(p => p.StoreParts)
+                    .Include(p => p.StoreParts)
                     .ToListAsync();
             }
             return parts;

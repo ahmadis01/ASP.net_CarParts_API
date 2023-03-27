@@ -16,13 +16,11 @@ using CarParts.Repoistory.CountryRepository;
 using CarParts.Repoistory.AuthRepository;
 using CarParts.Repoistory.CategoryRepository;
 using CarParts.Repoistory.PartRepository;
-using CarParts.Repoistory.CarPartRepository;
 using CarParts.Repoistory.StoreRepository;
 using CarParts.Repoistory.ClientRepository;
-
+using CarParts.Repoistory.InvoiceRepository;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -37,6 +35,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepoistory>();
 builder.Services.AddScoped<IStoreRepository, StoreRepository>();
 builder.Services.AddScoped<IPartRepository, PartRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
 builder.Services.AddTransient<BrandsSeed>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddHttpContextAccessor();

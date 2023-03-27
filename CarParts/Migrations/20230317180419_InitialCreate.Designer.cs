@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarParts.Migrations
 {
     [DbContext(typeof(CarPartContext))]
-    [Migration("20230307114547_InitialCreate")]
+    [Migration("20230317180419_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -275,6 +275,9 @@ namespace CarParts.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Services")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -303,6 +306,9 @@ namespace CarParts.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SellingPrice")
                         .HasColumnType("int");
 
                     b.Property<int>("StoreCPId")
@@ -509,11 +515,11 @@ namespace CarParts.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8d5de3c5-a2b0-4d75-bc54-197d41466782",
+                            ConcurrencyStamp = "2bae4819-f5bd-44aa-8ff5-15a7614fa2c2",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAELYCxTFlOwuuELwdjHd+pxYJJy48KdFyfA+iRNFzMTcM070KgRuouqyW3EkaczPxDg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAL4kVjo/KSuEX4HutO1YwML2OlQcAKABgaPiuLVH3V0PmznSmyHRjW5QxAY78rAJg==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "Admin"
@@ -553,21 +559,21 @@ namespace CarParts.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "56df4f54-041a-4456-900f-874050014712",
+                            ConcurrencyStamp = "ddbd3fda-e05a-4b74-af27-ec18e7a214a2",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "49760513-e0e1-4681-a1c4-dfb6577419dd",
+                            ConcurrencyStamp = "98002259-9560-4bfa-ad0e-1e6d7a33d228",
                             Name = "Accountant",
                             NormalizedName = "ACCOUNTANT"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "1a1ea07c-400b-45cb-b197-cdd6e28cb5b0",
+                            ConcurrencyStamp = "15f1f1a2-2741-4fd7-b6d6-b90cadb955e9",
                             Name = "DataEntry",
                             NormalizedName = "DATAENTRY"
                         });
