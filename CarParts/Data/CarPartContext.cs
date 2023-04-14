@@ -16,7 +16,7 @@ namespace CarParts.Data
         #endregion
         protected override void OnModelCreating(ModelBuilder builder)
         {
-           base.OnModelCreating(builder);
+            base.OnModelCreating(builder);
             builder.Entity<Car>()
                .HasOne(x => x.Brand)
                .WithMany(x => x.Car)
@@ -31,8 +31,8 @@ namespace CarParts.Data
                 );
 
 
-        //a hasher to hash the password before seeding the user to the db
-        var hasher = new PasswordHasher<IdentityUser<int>>();
+            //a hasher to hash the password before seeding the user to the db
+            var hasher = new PasswordHasher<IdentityUser<int>>();
             var user = new User
             {
                 Id = 1, // primary key
@@ -50,8 +50,12 @@ namespace CarParts.Data
             {
                 RoleId = 1, 
                 UserId = 1
-            }
-        );
+            });
+            var client = new Client
+            {
+                Name = "زبون مفرق"
+            };
+            builder.Entity<Client>().HasData(client);
         }
 
         #region - properties -

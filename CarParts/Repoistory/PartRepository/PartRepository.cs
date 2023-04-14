@@ -77,7 +77,6 @@ namespace CarParts.Repoistory.PartRepository
             var getPart = _mapper.Map<GetPartData>(part);
             return getPart;
         }
-
         public bool DeletePart(int id)
         {
             var part = _context.Parts.FirstOrDefault(p => p.Id == id);
