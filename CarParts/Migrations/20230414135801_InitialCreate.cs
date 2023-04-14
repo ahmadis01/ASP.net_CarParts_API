@@ -250,6 +250,7 @@ namespace CarParts.Migrations
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClientId = table.Column<int>(type: "int", nullable: false),
                     Services = table.Column<int>(type: "int", nullable: false),
+                    Received = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -450,15 +451,20 @@ namespace CarParts.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "ddbd3fda-e05a-4b74-af27-ec18e7a214a2", "Admin", "ADMIN" },
-                    { 2, "98002259-9560-4bfa-ad0e-1e6d7a33d228", "Accountant", "ACCOUNTANT" },
-                    { 3, "15f1f1a2-2741-4fd7-b6d6-b90cadb955e9", "DataEntry", "DATAENTRY" }
+                    { 1, "25acceff-31e0-442b-b66d-0b94016ac222", "Admin", "ADMIN" },
+                    { 2, "d855c93e-0bdc-4fe4-84bc-d019d712e0c6", "Accountant", "ACCOUNTANT" },
+                    { 3, "90c69fe2-7e84-4827-bae2-2e7ab933869d", "DataEntry", "DATAENTRY" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "2bae4819-f5bd-44aa-8ff5-15a7614fa2c2", null, false, false, null, null, "ADMIN", "AQAAAAEAACcQAAAAEAL4kVjo/KSuEX4HutO1YwML2OlQcAKABgaPiuLVH3V0PmznSmyHRjW5QxAY78rAJg==", null, false, null, false, "Admin" });
+                values: new object[] { 1, 0, "d7be0506-103b-454c-bd2f-fda33da1b48b", null, false, false, null, null, "ADMIN", "AQAAAAEAACcQAAAAEFl33ogJhqHOIFtShk6Wf2AR1g/m46LnFSCnZA0tI0/ZbLTGe7hab/suF6PS2eyd9g==", null, false, null, false, "Admin" });
+
+            migrationBuilder.InsertData(
+                table: "Clients",
+                columns: new[] { "Id", "CreatedAt", "DeletedAt", "Name", "PhoneNumber", "UpdatedAt" },
+                values: new object[] { 1, null, null, "زبون مفرق", null, null });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
