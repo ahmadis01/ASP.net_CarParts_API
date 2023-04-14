@@ -53,6 +53,7 @@ namespace CarParts.Data
             });
             var client = new Client
             {
+                Id = 1,
                 Name = "زبون مفرق"
             };
             builder.Entity<Client>().HasData(client);
