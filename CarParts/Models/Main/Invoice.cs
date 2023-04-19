@@ -12,7 +12,6 @@ namespace CarParts.Models.Main
         public Client Client { get; set; }
         public ICollection<Move> Moves { get; set; }
         public int Services { get; set; } = 0;
-
-
+        public bool Received { get; set; }
     }
 }

@@ -33,9 +33,7 @@ namespace CarParts.Data
                 {
                     var countryId = 0;
                     if (context.Countries.Where(a => a.Name == brand.Country).Any())
-                    {
                         countryId = context.Countries.Where(a => a.Name == brand.Country).FirstOrDefault().Id;
-                    }
                     else
                     {
                         var country = new Country();
