@@ -6,5 +6,7 @@
         public DateTime Date { get; set; }
         public int Coast { get; set; }
         public string? Notes { get; set; }
+        public int Services { get; set; }
+        public bool Received { get; set; }
     }
 }

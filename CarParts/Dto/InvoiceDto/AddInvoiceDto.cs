@@ -10,6 +10,7 @@ namespace CarParts.Dto.InvoiceDto
         public bool IsImport { get; set; }
         public string? Notes { get; set; }
         public int Services { get; set; }
+        public bool Received { get; set; }
         public List<AddPartsToInvoice>? Parts { get; set; }
     }
 }
