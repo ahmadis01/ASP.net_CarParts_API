@@ -3,14 +3,15 @@ import { GetAllCar } from '@/api/Car/dto'
 import { CategoryItem } from '@/api/Category/dto'
 import { InventoryItem } from '@/api/Inventory/dto'
 import { PartApi } from '@/api/Part'
-import { AddPartDTO } from '@/api/Part/dto'
+import { AddPartDTO } from '@/api/Part/AddPartDto'
 import { Add, Close, } from '@mui/icons-material'
 import { Button, Dialog, DialogContent, DialogTitle, FormControl, FormLabel, IconButton, InputLabel, MenuItem, Modal, Select, TextField } from '@mui/material'
 import { Box } from '@mui/system'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useMutation } from 'react-query'
-import Upload from '../Upload'
+import Upload from '../Upload';
+
 interface PropsType {
     cars: GetAllCar[],
     brands: BrandItem[],
@@ -24,8 +25,8 @@ export default function AddPart(props: PropsType) {
     })
 
     const [imageUrl, setImageUrl] = useState('')
-    const [open, setOpen] = useState(false)
 
+    const [open, setOpen] = useState(false)
 
     const mutation = useMutation('carPart', {
         mutationFn: PartApi.addPart,
@@ -159,7 +160,6 @@ export default function AddPart(props: PropsType) {
                             } />
                             <div className='col-span-6'>
 
-                                {/* <Controller control={control} name='partImage' render={({ field }) => */}
 
                                 <Upload name='image' url={imageUrl} onChange={event => {
                                     console.log(event)
@@ -167,7 +167,6 @@ export default function AddPart(props: PropsType) {
                                     setImageUrl(event.src)
                                 }}></Upload>
 
-                                {/* } /> */}
                             </div>
 
                             <Button className='col-span-12' variant='contained' type='submit' >حفظ القطعة</Button>

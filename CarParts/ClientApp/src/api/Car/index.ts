@@ -31,6 +31,9 @@ export class CarApi {
 
     }
 
+
+
+
     static deleteCar = async (carId: string | number) => {
         try {
             const res = await axiosIns.delete(`${CAR_API.base}/${carId}`,)
@@ -44,5 +47,4 @@ export class CarApi {
 
 
 }
-
 

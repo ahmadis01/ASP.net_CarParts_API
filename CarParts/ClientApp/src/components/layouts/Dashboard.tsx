@@ -9,69 +9,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { NavLink } from 'react-router-dom';
-import { Slide, useScrollTrigger } from '@mui/material';
-import { Home, ViewCompact, Inventory, ImportExport, Store, AttachMoney, Group, Settings, Google, Web, } from '@mui/icons-material'
-import DirectionsCarFilledIcon from '@mui/icons-material/DirectionsCarFilled';
-
-const navlinks = [
-    {
-        text: "الرئيسية",
-        path: "/",
-        icon: <Home />
-    },
-    {
-        text: "السيارات",
-        path: "/cars",
-        icon: <DirectionsCarFilledIcon />
-    },
-    {
-        text: "المنتجات",
-        path: "/products",
-        icon: <ViewCompact />
-    },
-    {
-        text: "الفواتير",
-        path: "/invoces",
-        icon: <ImportExport />
-    },
-    {
-        text: "المحاسبة",
-        path: "/accounting",
-        icon: <AttachMoney />
-    },
-    {
-        text: "العلامات التجارية",
-        path: "/brands",
-        icon: <Google />
-    },
-    {
-        text: "الدول المصنعة",
-        path: "/countries",
-        icon: <Web />
-    },
-    {
-        text: "الاعدادات",
-        path: "/settings",
-        icon: <Settings />
-    },
-    {
-        text: "المستودعات",
-        path: "/inventories",
-        icon: <Inventory />
-    },
-    {
-        text: "زبائن",
-        path: "/clients",
-        icon: <Inventory />
-    },
-
-
-]
-
+import { Avatar, Slide, TextField, useScrollTrigger } from '@mui/material';
+import navLinks from '@/Navigation'
 
 const drawerWidth = 280;
 
@@ -114,15 +56,17 @@ export default function ResponsiveDrawer(props: React.PropsWithChildren & any) {
                 <Typography color={'white'} fontSize={24}>Auto Parts </Typography>
             </Toolbar>
             <List>
-                {navlinks.map(({ text, path, icon }, index) => (
-                    <NavLink to={{ pathname: path }} end key={path} >
+                {navLinks.map((item, index) => (
+                    <NavLink to={{ pathname: item.path }} end key={item.path} >
                         {
                             ({ isActive }) => {
                                 return (
-                                    <ListItem >
+                                    <ListItem>
                                         <ListItemButton
                                             sx={({ palette }: any) => ({
-                                                borderRadius: "15px",
+                                                py: 0.6,
+                                                px: 2,
+                                                borderRadius: "1rem",
                                                 color: isActive ? "white" : palette.grey['700'],
                                                 "&.Mui-selected , &.Mui-selected:hover": {
                                                     backgroundColor: palette.primary.main
@@ -133,9 +77,9 @@ export default function ResponsiveDrawer(props: React.PropsWithChildren & any) {
                                             })}
                                             selected={isActive} >
                                             <ListItemIcon sx={({ palette }) => ({ color: isActive ? "white" : palette.grey['700'] })}>
-                                                {icon}
+                                                <item.icon />
                                             </ListItemIcon>
-                                            <ListItemText primary={text} />
+                                            <ListItemText primary={item.text} />
                                         </ListItemButton>
                                     </ListItem>
                                 )
@@ -165,9 +109,13 @@ export default function ResponsiveDrawer(props: React.PropsWithChildren & any) {
                         ml: { sm: `${drawerWidth}px` },
                     }}>
                     <Toolbar >
-                        <Typography color='#777777' variant="h6" component="div">
-                            Scroll to hide App bar
-                        </Typography>
+                        <Box display={'flex'} justifyContent='space-between' width={'100%'} >
+
+                            <TextField sx={{ minWidth: 400 }} placeholder='ابحث عن قطع , سيارات , زبائن ... ' size='small' variant='standard'></TextField>
+                            <Avatar title='السيد محمد خياطة' ></Avatar>
+
+                        </Box>
+
                     </Toolbar>
                 </AppBar>
             </HideOnScroll>

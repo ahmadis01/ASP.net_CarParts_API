@@ -1,0 +1,35 @@
+{
+    "name": "Car Management PWA",
+    "short_name": "CMGR",
+    "icons": [
+        {
+            "src": "./react.png",
+            "type": "image/svg+xml",
+            "sizes": "48x48"
+        },
+        {
+            "src": "./react.png",
+            "type": "image/svg+xml",
+            "sizes": "96x96"
+        },
+        {
+            "src": "./react.png",
+            "type": "image/svg+xml",
+            "sizes": "96x96"
+        },
+        {
+            "src": "./react.png",
+            "type": "image/svg+xml",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "../index.html",
+    "scope": ".",
+    "display": "standalone",
+    "orientaion": "portrait-primary",
+    "background_color": "#2b2b2b",
+    "theme_color": "#3761E9",
+    "description": "Car Management Application",
+    "dir": "rtl",
+    "lang": "ar-jo"
+}

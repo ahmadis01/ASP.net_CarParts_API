@@ -5,9 +5,12 @@ import * as path from 'path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { url } from 'inspector';
+import { AcceptedPlugin } from 'postcss';
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()
+  plugins: [
+
+    react()
 
   ],
   resolve: {
@@ -18,10 +21,8 @@ export default defineConfig({
     postcss: {
       plugins: [
         postcssRtl(),
-        tailwidCss({
-          config: './tailwind.config.cjs'
-        })
-      ]
+        tailwidCss()
+      ] as any
     }
   },
 
