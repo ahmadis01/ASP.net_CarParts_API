@@ -33,10 +33,10 @@ export default ({
     return (
         <div>
 
-            <h2 className='mb-2'>فلترة القطع </h2>
+            {/* <h2 className='mb-2'>فلترة القطع </h2> */}
             <div className="grid grid-cols-3 gap-4">
-                <FormControl>
-                    <InputLabel id='carCategory'>تصنيف القطعة</InputLabel>
+                <FormControl size='small'>
+                    <InputLabel id='carCategory' >تصنيف القطعة</InputLabel>
                     <Select onChange={(e) => onFilterChange(e.target.name, e.target.value)} name={'OrderBy' as keyof GetAllPartsParams} value={params.OrderBy ?? ''} label='تصنيف القطعة' labelId='carCategory'>
 
                         {
@@ -45,7 +45,7 @@ export default ({
 
                     </Select>
                 </FormControl>
-                <FormControl   >
+                <FormControl size='small'   >
                     <InputLabel id='carCategory'>السيارة التابعة للقطعة</InputLabel>
                     <Select onChange={(e) => onFilterChange(e.target.name, e.target.value)} name={'CarId' as keyof GetAllPartsParams} value={params.CarId ?? ''} label='السيارة التابعة للقطعة' labelId='carCategory'>
 
@@ -57,7 +57,7 @@ export default ({
                 </FormControl>
 
 
-                <FormControl   >
+                <FormControl size='small'   >
                     <InputLabel id='carCategory'>العلامة التجارية</InputLabel>
                     <Select onChange={(e) => onFilterChange(e.target.name, e.target.value)} name={'BrandId' as keyof GetAllPartsParams} value={params.BrandId ?? ''} label='العلامة التجارية' labelId='carCategory'>
 
@@ -69,7 +69,7 @@ export default ({
                 </FormControl>
 
 
-                <FormControl   >
+                <FormControl size='small'   >
                     <InputLabel id='carCategory'>بلد المنشأ</InputLabel>
                     <Select onChange={(e) => onFilterChange(e.target.name, e.target.value)} name={'CountryId' as keyof GetAllPartsParams} value={params.CountryId ?? ''} label='بلد المنشأ' labelId='carCategory'>
 
@@ -81,13 +81,16 @@ export default ({
                 </FormControl>
                 <FormControl   >
                     <DesktopDatePicker
+                        sx={{ height: 10 }}
                         label="تاريخ الإضافة"
                         format="MM/DD/YYYY"
                         value={params.Date}
+                        slotProps={{ textField: { size: 'small' } }}
+
                     />
                 </FormControl>
 
-                <FormControl   >
+                <FormControl size='small'   >
                     <InputLabel id='carCategory'>المستودع - المتجر</InputLabel>
                     <Select onChange={(e) => onFilterChange(e.target.name, e.target.value)} name={'StoreId' as keyof GetAllPartsParams} value={params.StoreId ?? ''} label='المستودع - المتجر' labelId='carCategory'>
 

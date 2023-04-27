@@ -17,7 +17,9 @@ import { GetAllPartsParams, PartItem } from '@/api/Part/GetAllDto'
 import { BrandApi } from '@/api/Brand'
 import PartsFilter from '@/components/parts/PartsFilter'
 import { Refresh } from '@mui/icons-material'
-
+import AddInvoice from '@/components/invoice/AddInvoice'
+import { CustomerItem } from '@/api/Customer/GetAll'
+import { CustomerApi } from '@/api/Customer'
 
 function Products() {
     const [carsList, setCarsList] = useState<GetAllCar[]>([])
@@ -25,9 +27,15 @@ function Products() {
     const [inventoriesList, setinventoriesList] = useState<InventoryItem[]>([])
     const [brandsList, setBrandsList] = useState<BrandItem[]>([])
     const [parts, setParts] = useState<PartItem[]>([])
-    const brands = useSelector<RootState, BrandItem[]>(s => s.brand.brands)
     const [params, setParams] = useState<GetAllPartsParams>({ ...new GetAllPartsParams() })
+    const [customers, setCustomers] = useState<CustomerItem[]>([])
+    const [partsToInvoice, setPartsToInvoice] = useState<PartItem[]>([])
+    const [invoiceDialog, setInvoiceDialog] = useState(false);
+
+
     const [total, setTotal] = useState(0);
+
+    const brands = useSelector<RootState, BrandItem[]>(s => s.brand.brands)
 
     const { refetch } = useQuery(['part', params.PageNumber], () => PartApi.getParts({
         ...params
@@ -59,6 +67,11 @@ function Products() {
             setBrandsList(data)
         }
     })
+    const customerQuery = useQuery({
+        queryFn: CustomerApi.fetchCustomers,
+        queryKey: 'customer',
+        onSuccess: (data) => { setCustomers(data) }
+    })
 
 
     const onPaginationChage = (pageNumber: number, pageSize: number) => {
@@ -72,6 +85,11 @@ function Products() {
 
     }
 
+    const showInvoiceDialog = (data: PartItem[]) => {
+        console.log('invoice', data)
+        setInvoiceDialog(true)
+        setPartsToInvoice(data)
+    }
     useEffect(() => {
         console.log('fuck react', params)
         refetch()
@@ -83,7 +101,7 @@ function Products() {
                 <div className="flex flex-col p-4 gap-4 ">
                     <div className='flex justify-between'>
 
-                        <Typography variant='h2' fontSize={24}>قطع السيارات</Typography>
+                        <Typography variant='h2' fontWeight={'500'} fontSize={24}>قطع السيارات</Typography>
                         <div className="flex gap-4">
                             <Button onClick={() => setParams(new GetAllPartsParams())} endIcon={<Refresh />}>تهيئة</Button>
                             <AddCarPart brands={brands} inventories={inventoriesList} categories={categoriesList} cars={carsList}></AddCarPart>
@@ -98,23 +116,15 @@ function Products() {
                         inventoriesList,
                         params,
                     }}
-                        onFilterChange={(key: string, value: string | null) => {
-                            console.log(key, value)
-                            setParams({ ...params, [key]: value })
-                        }
-
-                        }
-
-
-
+                        onFilterChange={(key: string, value: string | null) => { setParams({ ...params, [key]: value }) }}
 
                     />
 
                 </div>
 
             </Card>
-
-            <PartsTable page={params.PageNumber} onPageChange={onPaginationChage} rows={parts} rowsPerPage={params.PageSize} totalCount={total} />
+            <AddInvoice parts={partsToInvoice} customers={customers} onClose={(e) => setInvoiceDialog(e)} is={invoiceDialog}></AddInvoice>
+            <PartsTable onGenerateInvoice={(data: PartItem[]) => showInvoiceDialog(data)} page={params.PageNumber} onPageChange={onPaginationChage} rows={parts} rowsPerPage={params.PageSize} totalCount={total} />
         </div>
     )
 }

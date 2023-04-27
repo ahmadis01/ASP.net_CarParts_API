@@ -15,8 +15,8 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
-import { Pagination, TextField } from '@mui/material';
-import { Search } from '@mui/icons-material';
+import { Button, Pagination, TextField } from '@mui/material';
+import { Receipt, Search } from '@mui/icons-material';
 import { PartItem } from '@/api/Part/GetAllDto';
 import { useQuery, useQueryClient } from 'react-query';
 import { BrandItem } from '@/api/Brand/dto';
@@ -116,10 +116,12 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
     numSelected: number;
+    onGenerateInvoice: () => void
+
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-    const { numSelected } = props;
+    const { numSelected, onGenerateInvoice } = props;
 
     return (
         <Toolbar
@@ -154,11 +156,15 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 </Typography>
             )}
             {numSelected > 0 ? (
-                <Tooltip title="Delete">
-                    <IconButton>
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
+                <Box gap={4} display={'flex'} alignItems={'center'}>
+
+                    <Button className='flex-grow whitespace-nowrap' variant='contained' size='large' onClick={() => onGenerateInvoice()} startIcon={<Receipt />}>توليد فاتورة</Button>
+                    <Tooltip title="Delete">
+                        <IconButton>
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                </Box>
             ) : (
                 <Box >
 
@@ -188,10 +194,11 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     );
 }
 
-export default function PartsTable({ rows, totalCount, onPageChange, rowsPerPage, page }: {
+export default function PartsTable({ rows, totalCount, onPageChange, rowsPerPage, page, onGenerateInvoice }: {
     rows: PartItem[],
     totalCount: number,
     onPageChange: (newPage: number, rowsPerPage: number) => void,
+    onGenerateInvoice: (parts: PartItem[]) => void,
     rowsPerPage: number, page: number,
 }) {
 
@@ -199,7 +206,7 @@ export default function PartsTable({ rows, totalCount, onPageChange, rowsPerPage
     const queryClient = useQueryClient()
     const brands = queryClient.getQueryData<BrandItem[]>('brands')
     const cars = queryClient.getQueryData<GetAllCar[]>('cars')
-    const [selected, setSelected] = React.useState<readonly string[]>([]);
+    const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [dense, setDense] = React.useState(false);
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof PartItem>('createdAt');
@@ -215,19 +222,21 @@ export default function PartsTable({ rows, totalCount, onPageChange, rowsPerPage
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const newSelected = rows.map((n) => n.name);
+            const newSelected = rows.map((n) => n.id);
             setSelected(newSelected);
             return;
         }
         setSelected([]);
     };
 
-    const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-        const selectedIndex = selected.indexOf(name);
-        let newSelected: readonly string[] = [];
+    const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+        const selectedIndex = selected.indexOf(id);
+        let newSelected: readonly number[] = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
+
+            newSelected = newSelected.concat(selected, id);
+
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -250,7 +259,11 @@ export default function PartsTable({ rows, totalCount, onPageChange, rowsPerPage
         onPageChange(page, parseInt(event.target.value, 10))
     };
 
-    const isSelected = (name: string) => selected.indexOf(name) !== -1;
+
+    const isSelected = (id: number) => selected.indexOf(id) !== -1;
+
+
+
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
@@ -259,7 +272,10 @@ export default function PartsTable({ rows, totalCount, onPageChange, rowsPerPage
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar
+                    onGenerateInvoice={() => onGenerateInvoice(rows.filter(item => selected.includes(item.id)))}
+
+                    numSelected={selected.length} />
                 <TableContainer  >
 
                     <Table
@@ -278,7 +294,7 @@ export default function PartsTable({ rows, totalCount, onPageChange, rowsPerPage
                         <TableBody >
                             {
                                 rows.map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
+                                    const isItemSelected = isSelected(row.id);
 
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -286,7 +302,7 @@ export default function PartsTable({ rows, totalCount, onPageChange, rowsPerPage
                                         <TableRow
                                             hover
                                             sx={{ paddingX: 10 }}
-                                            onClick={(event) => handleClick(event, row.name)}
+                                            onClick={(event) => handleClick(event, row.id)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
