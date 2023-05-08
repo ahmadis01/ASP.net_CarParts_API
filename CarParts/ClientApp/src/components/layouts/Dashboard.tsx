@@ -112,7 +112,7 @@ export default function ResponsiveDrawer(props: React.PropsWithChildren & any) {
                         <Box display={'flex'} justifyContent='space-between' width={'100%'} >
 
                             <TextField sx={{ minWidth: 400 }} placeholder='ابحث عن قطع , سيارات , زبائن ... ' size='small' variant='standard'></TextField>
-                            <Avatar title='السيد محمد خياطة' ></Avatar>
+                            <Avatar title='ENG.Mohammad Khayata 😎' ></Avatar>
 
                         </Box>
 

@@ -105,75 +105,79 @@ export default function FormDialog({ carModifyDto, onCloseDialog }: propsType) {
             </Button>
 
             <Dialog open={showModal} >
-
-                <form onSubmit={handleSubmit(onsubmit)} >
-                    <div className="flex justify-between items-center pl-4">
-                        <DialogTitle
-                        >إضافة سيارة
-
-                        </DialogTitle>
+                <Box>
 
 
-                        <IconButton onClick={() => dispatch(CarActions.setCarModal(false))}><Close /></IconButton>
-                    </div>
-                    <DialogContent className='flex flex-col min-w-[35rem] p-2 gap-4 '>
+                    <form onSubmit={handleSubmit(onsubmit)} className='overflow-hidden'>
+                        <div className="flex justify-between items-center pl-4 ">
+                            <DialogTitle
+                            >إضافة سيارة
+
+                            </DialogTitle>
 
 
-
-                        <Controller rules={{ required: 'يرجى اختيار الشركة المصنعة' }} name='brandId' control={control} render={({ field, fieldState }) =>
-                            <FormControl className='py-4 my-5 ' sx={{ marginTop: '10px' }} error={!!fieldState.error}>
-                                <InputLabel id="brand-id-label">الشركة المصنعة</InputLabel>
-                                <Select
-                                    {...field}
-                                    name='brandId'
-                                    labelId="brand-id-label"
-                                    label="الشركة المصنعة"
-                                >
-                                    {
-                                        brands.map((b) => <MenuItem key={b.id} value={b.id}>{b.name}</MenuItem>)
-                                    }
-
-                                </Select>
-                                <FormHelperText>
-                                    {fieldState.error?.message}
-                                </FormHelperText>
-                            </FormControl>
-                        } />
-
-
-                        <Controller rules={{ required: 'هذا الحقل مطلوب' }} name='name' control={control} render={({ field, fieldState }) =>
-                            <TextField error={!!fieldState.error}
-                                helperText={fieldState.error?.message}
-                                {...field} name='name' id='car-name' label='اسم السيارة'
-                            />
-                        }
-                        />
-
-                        <Controller rules={{ required: 'موديل السيارة مطلوب' }} name='model' control={control} render={({ field, fieldState }) =>
-
-                            <TextField error={!!fieldState.error}   {...field} name='model' id='car-model' helperText={fieldState.error?.message} label='موديل السيارة' />
-                        }
-                        />
-                        <div>
-
-                            <Upload url={imageUrl} onChange={({ file, src }) => { setValue('image', file), setImageUrl(src) }} label="صورة السيارة" name='image' />
-
+                            <IconButton onClick={() => dispatch(CarActions.setCarModal(false))}><Close /></IconButton>
                         </div>
+                        <DialogContent className='flex flex-col min-w-[35rem] p-2 gap-4 '>
 
-                    </DialogContent>
-                    <DialogActions sx={{ justifyContent: 'space-between' }}>
 
-                        <Box gap={2} display='flex' >
-                            <Button variant='contained' type='submit'>إضافة السيارة</Button>
-                            <Button onClick={() => dispatch(CarActions.setCarModal(false))}>الغاء</Button>
 
-                        </Box >
-                        {
-                            carModifyDto && <Button variant='text' color='error' onClick={() => deleteCar.mutate(carModifyDto.id)}>حذف السيارة</Button>
-                        }
+                            <Controller rules={{ required: 'يرجى اختيار الشركة المصنعة' }} name='brandId' control={control} render={({ field, fieldState }) =>
+                                <FormControl className='py-4 my-5 ' sx={{ marginTop: '10px' }} error={!!fieldState.error}>
+                                    <InputLabel id="brand-id-label">الشركة المصنعة</InputLabel>
+                                    <Select
+                                        {...field}
+                                        name='brandId'
+                                        labelId="brand-id-label"
+                                        label="الشركة المصنعة"
+                                    >
+                                        {
+                                            brands.map((b) => <MenuItem key={b.id} value={b.id}>{b.name}</MenuItem>)
+                                        }
 
-                    </DialogActions>
-                </form>
+                                    </Select>
+                                    <FormHelperText>
+                                        {fieldState.error?.message}
+                                    </FormHelperText>
+                                </FormControl>
+                            } />
+
+
+                            <Controller rules={{ required: 'هذا الحقل مطلوب' }} name='name' control={control} render={({ field, fieldState }) =>
+                                <TextField error={!!fieldState.error}
+                                    helperText={fieldState.error?.message}
+                                    {...field} name='name' id='car-name' label='اسم السيارة'
+                                />
+                            }
+                            />
+
+                            <Controller rules={{ required: 'موديل السيارة مطلوب' }} name='model' control={control} render={({ field, fieldState }) =>
+
+                                <TextField error={!!fieldState.error}   {...field} name='model' id='car-model' helperText={fieldState.error?.message} label='موديل السيارة' />
+                            }
+                            />
+                            <div>
+
+                                <Upload url={imageUrl} onChange={({ file, src }) => { setValue('image', file), setImageUrl(src) }} label="صورة السيارة" name='image' />
+
+                            </div>
+
+                        </DialogContent>
+                        <DialogActions sx={{ justifyContent: 'space-between' }}>
+
+                            <Box gap={2} display='flex' >
+                                <Button variant='contained' type='submit'>إضافة السيارة</Button>
+                                <Button onClick={() => dispatch(CarActions.setCarModal(false))}>الغاء</Button>
+
+                            </Box >
+                            {
+                                carModifyDto && <Button variant='text' color='error' onClick={() => deleteCar.mutate(carModifyDto.id)}>حذف السيارة</Button>
+                            }
+
+                        </DialogActions>
+                    </form>
+                </Box>
+
             </Dialog>
         </div >
     );
