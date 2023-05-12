@@ -1,8 +1,8 @@
-import { GetPartsDTO } from "@/api/Part/dto";
+import { GetAllParts } from "@/api/Part/GetAllDto";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface State {
-    parts: GetPartsDTO[]
+    parts: GetAllParts[]
 }
 const initialState: State = {
     parts: []
@@ -12,7 +12,7 @@ const PartSlice = createSlice({
     name: 'part',
     initialState,
     reducers: {
-        setParts(state: State, action: PayloadAction<GetPartsDTO[]>) {
+        setParts(state: State, action: PayloadAction<GetAllParts[]>) {
             state.parts = action.payload
         }
     }

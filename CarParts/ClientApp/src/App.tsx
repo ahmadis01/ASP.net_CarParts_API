@@ -22,8 +22,17 @@ import { CountryItem } from './api/Country/dto';
 import { CountryActions } from './store/countries';
 import { CountryApi } from './api/Country';
 import { SERVER_URL } from '../app.config';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+
 const stylisPlugins = [prefixer];
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // refetchOnWindowFocus: false
+    }
+  }
+})
 const htmlDir = document.querySelector('html');
 if (htmlDir?.dir === 'rtl') {
   stylisPlugins.push(rtlPlugin)
@@ -60,28 +69,31 @@ function App() {
   return (
     <div className="app tw-w-full">
       <ThemeProvider theme={customTheme}>
-        <QueryClientProvider client={queryClient}>
-          <StartupCalls />
-          <RTL>
+        <LocalizationProvider dateAdapter={AdapterMoment}>
 
-            <CssBaseline />
-            <BrowserRouter>
+          <QueryClientProvider client={queryClient}>
+            <StartupCalls />
+            <RTL>
+
+              <CssBaseline />
+              <BrowserRouter>
 
 
 
-              <Suspense fallback={'Loading Some Thing'}>
+                <Suspense fallback={'Loading Some Thing'}>
 
-                <main className='tw-block'>
-                  <Router />
+                  <main className='tw-block'>
+                    <Router />
 
-                </main>
-              </Suspense>
-            </BrowserRouter>
-          </RTL>
-          <ReactQueryDevtools />
-          <ToastContainer />
+                  </main>
+                </Suspense>
+              </BrowserRouter>
+            </RTL>
+            <ReactQueryDevtools />
+            <ToastContainer />
 
-        </QueryClientProvider>
+          </QueryClientProvider>
+        </LocalizationProvider>
       </ThemeProvider>
       <div className="fixed bottom-4 right-4  z-[10000]  text-white">
         <a href={`${SERVER_URL}/swagger/index.html`} target='_blank'>Swagger Api</a>

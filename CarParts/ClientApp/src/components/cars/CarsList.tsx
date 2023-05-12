@@ -16,7 +16,7 @@ type propsType = {
 }
 export default function CarsList(props: propsType) {
     const brands = useSelector<RootState, BrandItem[]>(state => state.brand.brands)
-    const brandInfo = (id: number) => brands.find(b => b.id == id)
+    const brandInfo = (id: number | string) => brands.find(b => b.id == id)
     const getFileUrl = (url: string) => `${SERVER_URL}/${url}`
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
@@ -33,9 +33,9 @@ export default function CarsList(props: propsType) {
                         <CardContent className=''>
                             <div className="flex justify-between items-center">
 
-                                {brands.length && <img src={`/brands/${brandInfo(car.brandId)?.name}.png`} className='h-14' alt="" />}
-                                <Typography className='text-gray-700' fontWeight={600} gutterBottom variant="h5" margin={0} component="div">
-                                    {brandInfo(car.brandId)?.name} {car.name}
+                                {brands.length && <img src={`/brands/${brandInfo(car.brandId)?.name}.png`} className='h-16' alt="" />}
+                                <Typography className='text-gray-700' fontWeight={600} gutterBottom variant="h6" fontSize={20} margin={0} component="div">
+                                    {car.name}
                                 </Typography>
                             </div>
                             <Typography className='text-gray-500' fontSize={14} align='right'>{car.model}</Typography>

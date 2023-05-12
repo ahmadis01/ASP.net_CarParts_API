@@ -44,8 +44,6 @@ export default function FormDialog({ carModifyDto, onCloseDialog }: propsType) {
     })
 
     const resetForm = () => {
-        console.log('reset form');
-
         reset({ ...initialFormState });
         setImageUrl('')
         dispatch(CarActions.setCarModal(false));
