@@ -1,7 +1,10 @@
 import { CustomerItem } from "@/api/Customer/GetAll";
+import { InvoiceApi } from "@/api/Invoice";
 import { AddInvoiceDto } from "@/api/Invoice/AddInvoiceDto";
 import { GetAllParts, PartItem } from "@/api/Part/GetAllDto";
+import { Add, Close } from "@mui/icons-material";
 import {
+  Box,
   Button,
   Checkbox,
   Dialog,
@@ -12,6 +15,7 @@ import {
   FormControlLabel,
   FormHelperText,
   FormLabel,
+  IconButton,
   InputLabel,
   MenuItem,
   Modal,
@@ -24,6 +28,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import React, { useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
@@ -45,12 +50,13 @@ export default (props: Props) => {
           partId: part.id,
           price: part.sellingPrice,
           quantity: 1,
-          storeId: 0,
+          storeId: 1,
         }))
       );
   }, [props.parts]);
 
   const initialFormState: AddInvoiceDto = {
+    received: true,
     clientId: "",
     coast: 0,
     date: new Date().toISOString().substring(0, 10),
@@ -64,10 +70,14 @@ export default (props: Props) => {
     useForm<AddInvoiceDto>({
       defaultValues: { ...initialFormState },
     });
+
   const parts = watch("parts", []); // you can also target specific fields by their names
   const service = watch("services", 0); // you can also target specific fields by their names
 
-  const onSubmit = () => {};
+  const onSubmit = (data: AddInvoiceDto) => {
+    data.date = new Date(data.date);
+    InvoiceApi.CreateInvoice(data);
+  };
 
   useEffect(() => {
     console.log("wtf is changing");
@@ -82,10 +92,40 @@ export default (props: Props) => {
   return (
     <div>
       <Dialog open={props.is} maxWidth={"md"} fullWidth>
+        <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} pr={2}>
+
+          <DialogTitle >إنشاء فاتورة</DialogTitle>
+          <IconButton onClick={()=>props.onClose(false)}>
+            <Close></Close>
+          </IconButton>
+        </Box>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle>إنشاء فاتورة</DialogTitle>
+          
+          
           <DialogContent>
-            <div className="grid grid-cols-12  gap-4">
+            <div className="grid grid-cols-12 gap-4">
+              <Controller
+                name="isImport"
+                control={control}
+                render={({ field }) => (
+                  <FormControl className="col-span-12">
+                    <FormLabel>نوع الفاتورة</FormLabel>
+                    <RadioGroup row defaultValue={false}>
+                      <FormControlLabel
+                        value={false}
+                        control={<Radio />}
+                        label="مبيع"
+                      />
+                      <FormControlLabel
+                        value={true}
+                        control={<Radio />}
+                        label="شراء"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+                )}
+              />
+
               <Controller
                 name="clientId"
                 rules={{ required: true }}
@@ -104,6 +144,13 @@ export default (props: Props) => {
                         labelId="brand-id-label"
                         label="الزبون"
                       >
+                        <MenuItem
+                        >
+                          <Typography color={'primary'}>
+
+                          إضافة زبون جديد <Add />
+                          </Typography>
+                        </MenuItem>
                         {props.customers.map((c) => (
                           <MenuItem key={c.id} value={c.id}>
                             {c.name}
@@ -137,27 +184,6 @@ export default (props: Props) => {
                     ></TextField>
                   );
                 }}
-              />
-              <Controller
-                name="isImport"
-                control={control}
-                render={({ field }) => (
-                  <FormControl className="col-span-12">
-                    <FormLabel>نوع الفاتورة</FormLabel>
-                    <RadioGroup row defaultValue={false}>
-                      <FormControlLabel
-                        value={false}
-                        control={<Radio />}
-                        label="صادرات"
-                      />
-                      <FormControlLabel
-                        value={true}
-                        control={<Radio />}
-                        label="واردات"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                )}
               />
 
               {props.parts.length && (
@@ -261,20 +287,33 @@ export default (props: Props) => {
                       </TableCell>
 
                       <TableCell colSpan={4}>
-                        {parts.length && (
+                        <Box display={"flex"} gap={2}>
+                          {parts.length && (
+                            <Controller
+                              name="coast"
+                              control={control}
+                              render={({ field }) => (
+                                <TextField
+                                  {...field}
+                                  type="number"
+                                  size="small"
+                                  className="w-full"
+                                ></TextField>
+                              )}
+                            />
+                          )}
                           <Controller
-                            name="coast"
+                            name="received"
                             control={control}
                             render={({ field }) => (
-                              <TextField
+                              <FormControlLabel
                                 {...field}
-                                type="number"
-                                size="small"
-                                className="w-full"
-                              ></TextField>
+                                control={<Checkbox defaultChecked />}
+                                label="مقبوضة"
+                              />
                             )}
-                          />
-                        )}
+                          ></Controller>
+                        </Box>
                       </TableCell>
                     </TableRow>
                   </TableBody>

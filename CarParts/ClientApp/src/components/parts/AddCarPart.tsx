@@ -11,6 +11,7 @@ import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useMutation } from 'react-query'
 import Upload from '../Upload';
+import { toast } from 'react-toastify'
 
 interface PropsType {
     cars: GetAllCar[],
@@ -19,10 +20,12 @@ interface PropsType {
     categories: CategoryItem[]
 }
 export default function AddPart(props: PropsType) {
-    const { control, handleSubmit, setValue } = useForm<AddPartDTO>({
+    const { control, handleSubmit, setValue, reset ,watch } = useForm<AddPartDTO>({
         defaultValues: { ... new AddPartDTO() },
 
     })
+
+    const cars = watch('carIds')
 
     const [imageUrl, setImageUrl] = useState('')
 
@@ -30,7 +33,14 @@ export default function AddPart(props: PropsType) {
 
     const mutation = useMutation('carPart', {
         mutationFn: PartApi.addPart,
-        onSuccess: () => console.log('test')
+        onSuccess: () =>{
+            toast(`تمت إضافة القطعة بنجاح`,{
+                theme: 'light',
+                type: 'success'
+            })
+            // reset();
+            setOpen(false)
+        }
     })
 
     const onSubmit = (values: AddPartDTO) => {

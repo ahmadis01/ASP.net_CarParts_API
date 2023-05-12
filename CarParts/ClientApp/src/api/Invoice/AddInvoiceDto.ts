@@ -1,8 +1,9 @@
 class AddInvoiceDto {
-  date: string = "";
+  date: string|Date = "";
   coast: number = 0;
   clientId: string = '';
   isImport: boolean = false;
+  received = true;
   notes: string = "";
   services: number = 0;
   parts: Part[] = [];

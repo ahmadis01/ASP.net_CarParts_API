@@ -22,7 +22,10 @@ export class PartApi {
     
     static async addPart(dto: AddPartDTO) {
         try {
-            const { data } = await axiosIns.post<string, AxiosResponse<boolean>>(PartsEndpoints.base, serialize(dto, { indices: true }))
+            const { data } = await axiosIns.post<string, AxiosResponse<boolean>>(PartsEndpoints.base, serialize(dto, {
+                dotsForObjectNotation:true,
+                allowEmptyArrays:true,
+            }))
             return data
         }
         catch (er) {
