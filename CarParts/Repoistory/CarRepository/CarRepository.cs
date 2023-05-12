@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CarParts.Data;
 using CarParts.Dto.CarDto;
+using CarParts.Dto.PartDto;
 using CarParts.Models.Main;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;
@@ -48,7 +49,9 @@ namespace CarParts.Repoistory.CarRepository
         public async Task<GetCarDto> GetCar(int id)
         {
             var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
+            int TotalParts = _context.CarParts.Where(c => c.CarId == id).Count();
             var carDto = _mapper.Map<GetCarDto>(car);
+            carDto.TotalParts = TotalParts;
             return carDto;
         }
         public async Task<GetCarDto> GetCar(string name)

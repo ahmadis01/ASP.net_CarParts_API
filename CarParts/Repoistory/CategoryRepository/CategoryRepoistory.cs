@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CarParts.Data;
 using CarParts.Dto.CategoryDto;
+using CarParts.Dto.PartDto;
 using CarParts.Models.Main;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,7 +44,9 @@ namespace CarParts.Repoistory.CategoryRepository
         public async Task<GetCategoryDto> GetCategory(int id)
         {
             var category = await context.Categories.FirstOrDefaultAsync(c => c.Id == id);
+            int totalParts = context.Parts.Where(p => p.CategoryId == category.Id).Count();
             var categoryDto = mapper.Map<GetCategoryDto>(category);
+            categoryDto.TotalParts = totalParts;
             return categoryDto;
         }
         

@@ -61,7 +61,7 @@ namespace CarParts.Repoistory.PartRepository
             for (int i = 0; i < partDto.CarIds.Count; i++)
             {
                 var carPart = new CarPart();
-                carPart.CarId = i + 1;
+                carPart.CarId = partDto.CarIds[i];
                 carPart.PartId = partRes.Entity.Id;
                 await _context.CarParts.AddAsync(carPart);
                 await _context.SaveChangesAsync();

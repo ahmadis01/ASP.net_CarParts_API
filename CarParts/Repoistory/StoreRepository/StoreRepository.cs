@@ -20,6 +20,8 @@ namespace CarParts.Repoistory.StoreRepository
         {
             var stores = await _context.Stores.OrderBy(s => s.Id).ToListAsync();
             var storesDto = _mapper.Map<List<GetStoreDto>>(stores);
+            foreach (var store in storesDto)
+                store.TotalParts = _context.StoreParts.Where(s => s.StoreId == store.Id).Count();
             return storesDto;
         }
 
@@ -27,9 +29,9 @@ namespace CarParts.Repoistory.StoreRepository
         {
             var store =await _context.Stores.FirstOrDefaultAsync(s => s.Id == id);
             var storeDto = _mapper.Map<GetStoreDto>(store);
+            storeDto.TotalParts = _context.StoreParts.Where(s => s.StoreId == store.Id).Count();
             return storeDto;
         }
-
 
         public async Task<GetStoreDto> AddStore(AddStoreDto storeDto)
         {
