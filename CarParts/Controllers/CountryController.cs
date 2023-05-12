@@ -24,6 +24,10 @@ namespace CarParts.Controllers
         }
         [HttpGet("{id}")]
         public async Task<ActionResult> GetCountyry(int id)
+
+
+
+
         {
             var country = await _countryRepository.GetCountry(id);
             return Ok(country);

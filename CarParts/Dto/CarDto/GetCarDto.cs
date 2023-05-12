@@ -1,4 +1,5 @@
 ﻿using CarParts.Dto.BrandDto;
+using CarParts.Dto.PartDto;
 
 namespace CarParts.Dto.CarDto
 {
@@ -10,6 +11,7 @@ namespace CarParts.Dto.CarDto
         public string Image { get; set; }
         public int BrandId { get; set; }
         public int? CarCategoryId { get; set; }
+        public int TotalParts { get; set; }
 
     }
 }
