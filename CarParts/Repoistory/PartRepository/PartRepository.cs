@@ -40,7 +40,7 @@ namespace CarParts.Repoistory.PartRepository
 
             var partsData = new GetPartDto();
             partsData.Parts = partsDto;
-            partsData.TotalNumber = _context.Parts.Count();
+            partsData.TotalNumber = partsData.Parts.Count();
             return partsData;
         }
         public async Task<GetPartData> AddPart(AddPartDto partDto)
@@ -132,11 +132,13 @@ namespace CarParts.Repoistory.PartRepository
             }
             if (parameters.StoreId != 0)
             {
-                var stores = _context.StoreParts.Where(s => s.StoreId == parameters.StoreId).ToList();
-                foreach (var store in stores)
-                {
-                    parts = parts.Where(p => p.Id == store.PartId).ToList();
-                }
+                var stores = _context.StoreParts.Where(s => s.StoreId == parameters.StoreId).Select(s => s.PartId).ToList();
+                parts = parts.Join(stores, p => p.Id, id => id, (p, id) => p).ToList();
+            }
+            if(parameters.CarId != 0)
+            {
+                var cars = _context.CarParts.Where(s => s.CarId == parameters.CarId).Select(c => c.PartId).ToList();
+                parts = parts.Join(cars, p => p.Id, id => id, (p, id) => p).ToList();
             }
             if (!String.IsNullOrEmpty(parameters.OrderBy))
             {
@@ -167,6 +169,7 @@ namespace CarParts.Repoistory.PartRepository
                 parts = await _context.Parts
                     .OrderBy(p => p.CreatedAt)
                     .Include(p => p.StoreParts)
+                    .Include(p => p.CarParts)
                     .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                     .Take(parameters.PageSize)
                     .ToListAsync();
@@ -176,6 +179,7 @@ namespace CarParts.Repoistory.PartRepository
                 parts = await _context.Parts
                     .OrderBy(p => p.Id)
                     .Include(p => p.StoreParts)
+                    .Include(p => p.CarParts)
                     .ToListAsync();
             }
             return parts;
