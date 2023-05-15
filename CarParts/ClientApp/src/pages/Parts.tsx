@@ -1,6 +1,6 @@
 import PartsTable from "@/components/parts/PartsTable";
 import { PartApi } from "@/api/Part";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import {
   Accordion,
   AccordionDetails,
@@ -65,6 +65,8 @@ function Products() {
       },
     }
   );
+
+  const {invalidateQueries} = useQueryClient()
 
   const carQuery = useQuery("car", CarApi.fetchCars, {
     onSuccess: (cars) => setCarsList(cars),
@@ -166,7 +168,9 @@ function Products() {
         </div>
       </Card>
       <CreateInvoice
-        onSubmit={() => {}}
+        onSubmit={() => {
+          invalidateQueries('part')
+        }}
         parts={partsToInvoice}
         customers={customers}
         onClose={(e) => setInvoiceDialog(e)}

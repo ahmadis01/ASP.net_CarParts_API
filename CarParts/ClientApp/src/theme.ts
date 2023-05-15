@@ -41,6 +41,8 @@ export const customTheme = createTheme({
 
     },
 
+
+
     components:{
         MuiCard:{
             defaultProps:{
@@ -52,6 +54,13 @@ export const customTheme = createTheme({
                 elevation:0,
                 variant:'outlined'
                 
+            }
+        },
+        MuiButton:{
+            defaultProps:{
+                sx:{
+                    boxShadow:0
+                }
             }
         }
         

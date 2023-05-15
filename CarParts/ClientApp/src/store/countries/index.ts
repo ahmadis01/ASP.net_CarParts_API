@@ -19,4 +19,5 @@ export const countriesSlice = createSlice({
     },
 })
 export default countriesSlice.reducer
+
 export const CountryActions = countriesSlice.actions

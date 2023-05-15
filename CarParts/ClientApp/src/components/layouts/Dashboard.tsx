@@ -51,8 +51,13 @@ export default function ResponsiveDrawer(props: React.PropsWithChildren & any) {
 
   const drawer = (
     <Box>
-      <Toolbar>
-        <Typography fontSize={24}>Auto Parts</Typography>
+      <Toolbar sx={{
+        display:'flex',
+        justifyContent:'center',
+        gap:2
+      }}>
+        <Typography fontWeight={'bold'} fontSize={24}>Auto Parts</Typography>
+        <img alt='logo' width={'56'} src='/Asset 1.svg'></img>
       </Toolbar>
       <List>
         {navLinks.map((item, index) => (
@@ -66,9 +71,9 @@ export default function ResponsiveDrawer(props: React.PropsWithChildren & any) {
                 <ListItem>
                   <ListItemButton
                     sx={({ palette }: any) => ({
-                      py: 0.6,
+                      py: 0.8,
                       px: 2,
-                      borderRadius: "1rem",
+                      borderRadius: "0.5rem",
                       color: isActive ? "white" : palette.grey["700"],
                       "&.Mui-selected , &.Mui-selected:hover": {
                         backgroundColor: palette.primary.main,
