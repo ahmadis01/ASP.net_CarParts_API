@@ -34,8 +34,10 @@ namespace CarParts.Repoistory.PartRepository
             }
 
             var partsDto = _mapper.Map<List<GetPartData>>(parts);
+
             foreach (var partDto in partsDto)
                 partDto.Cars = _context.CarParts.Where(c => c.PartId == partDto.Id).Select(c => c.CarId).ToList();
+
             var partsData = new GetPartDto();
             partsData.Parts = partsDto;
             partsData.TotalNumber = _context.Parts.Count();

@@ -144,7 +144,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("Policy");
+app.UseCors(cors => cors
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .SetIsOriginAllowed(origin => true) // allow any origin
+              .AllowCredentials()); // allow credentials
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
