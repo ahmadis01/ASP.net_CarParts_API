@@ -165,7 +165,7 @@ namespace CarParts.Repoistory.PartRepository
             if (parameters.PageSize != 0 && parameters.PageNumber != 0)
             {
                 parts = await _context.Parts
-                    .OrderBy(p => p.Id)
+                    .OrderBy(p => p.CreatedAt)
                     .Include(p => p.StoreParts)
                     .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                     .Take(parameters.PageSize)
