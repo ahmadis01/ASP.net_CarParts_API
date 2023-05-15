@@ -25,7 +25,7 @@ export default function Brands() {
                     sx={{ borderRadius: '15px', fontSize: '20px', fontWeight: "bold" }}
                     onClick={() =>
                       navigate({
-                        pathname: '/products',
+                        pathname: '/products?PageNumber=1',
                         search: `?BrandId=${b.id}`
                       })}  >
 

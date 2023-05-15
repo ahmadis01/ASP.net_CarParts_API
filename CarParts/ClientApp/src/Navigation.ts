@@ -15,7 +15,8 @@ export default [
     {
         text: "القطع",
         path: "/products",
-        icon: ViewCompact 
+        icon: ViewCompact,
+        params:"?PageSize=5&PageNumber=1",
     },
     {
         text: "الفواتير",

@@ -10,6 +10,7 @@ export enum PartsEndpoints {
 
 export class PartApi {
     static async getParts(params: Partial< GetAllPartsParams>) {
+        console.log('GetParts', params)
         try {
             const { data } = await axiosIns.get<GetAllParts>(PartsEndpoints.base, { params })
             return data;

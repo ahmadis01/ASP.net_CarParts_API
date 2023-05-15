@@ -18,7 +18,7 @@ import AddCarPart from "@/components/parts/AddCarPart";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { CarApi } from "@/api/Car";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GetAllCar } from "@/api/Car/dto";
 import { BrandItem } from "@/api/Brand/dto";
 import { CategoryApi } from "@/api/Category";
@@ -40,28 +40,24 @@ function Products() {
   const [inventoriesList, setinventoriesList] = useState<InventoryItem[]>([]);
   const [brandsList, setBrandsList] = useState<BrandItem[]>([]);
   const [parts, setParts] = useState<PartItem[]>([]);
-  const [params, setParams] = useState<GetAllPartsParams>({
-    ...new GetAllPartsParams(),
-  });
+
   const [customers, setCustomers] = useState<CustomerItem[]>([]);
   const [partsToInvoice, setPartsToInvoice] = useState<PartItem[]>([]);
   const [invoiceDialog, setInvoiceDialog] = useState(false);
   const [total, setTotal] = useState(0);
   const [searchParams, setSearchParams] = useSearchParams();
-  useEffect(() => {
-    searchParams.forEach((value: string, key: string) => {
-      setParams({ ...params, [key]: value });
-    });
-  }, []);
+  const params = useMemo<GetAllPartsParams>(
+    () => Object.fromEntries(searchParams) as any,
+    [searchParams]
+  );
+
+  searchParams.getAll;
 
   const brands = useSelector<RootState, BrandItem[]>((s) => s.brand.brands);
 
   const { refetch } = useQuery(
     ["part", params.PageNumber],
-    () =>
-      PartApi.getParts({
-        ...params,
-      }),
+    () => PartApi.getParts(params),
     {
       onSuccess(data) {
         setParts(data.parts);
@@ -103,13 +99,10 @@ function Products() {
     },
   });
 
-  const onPaginationChage = (pageNumber: number, pageSize: number) => {
-    console.log(pageNumber);
-    setParams((ol) => ({
-      ...ol,
-      PageSize: pageSize,
-      PageNumber: pageNumber,
-    }));
+  const onPaginationChage = (PageNumber: number, PageSize: number) => {
+    searchParams.set("PageSize", PageSize.toString());
+    searchParams.set("PageNumber", PageNumber.toString());
+    setSearchParams(searchParams);
     refetch();
   };
 
@@ -119,21 +112,26 @@ function Products() {
     setPartsToInvoice(data);
   };
   useEffect(() => {
-    console.log("fuck react", params);
     refetch();
-  }, [params]);
+  }, [JSON.stringify(params)]);
 
   return (
     <div>
-      <Card className="mb-4">
+      <Card className="mb-4" >
         <div className="flex flex-col p-4 gap-4 ">
           <div className="flex justify-between">
-            <Typography variant="h2" fontWeight={"500"} fontSize={24}>
+            <Typography variant="h2" fontWeight={"bold"} fontSize={24}>
               قطع السيارات
             </Typography>
             <div className="flex gap-4">
               <Button
-                onClick={() => setParams(new GetAllPartsParams())}
+                onClick={() => {
+                 
+                  setSearchParams({
+                    PageSize:'5',
+                    PageNumber:'1'
+                  })
+                }}
                 endIcon={<Refresh />}
               >
                 تهيئة
@@ -146,7 +144,7 @@ function Products() {
               ></AddCarPart>
             </div>
           </div>
-
+          {/* {JSON.stringify(params)} */}
           <PartsFilter
             {...{
               brandsList,
@@ -157,7 +155,12 @@ function Products() {
               params,
             }}
             onFilterChange={(key: string, value: string | null) => {
-              setParams({ ...params, [key]: value });
+              if (value) {
+                searchParams.set(key, value);
+                setSearchParams(searchParams);
+              } else {
+                searchParams.delete(key);
+              }
             }}
           />
         </div>

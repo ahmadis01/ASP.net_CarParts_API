@@ -21,6 +21,7 @@ import { PartItem } from "@/api/Part/GetAllDto";
 import { useQuery, useQueryClient } from "react-query";
 import { BrandItem } from "@/api/Brand/dto";
 import { GetAllCar } from "@/api/Car/dto";
+import { SERVER_URL } from "@/../app.config";
 
 type Order = "asc" | "desc";
 
@@ -37,14 +38,14 @@ const headCells: readonly HeadCell[] = [
     label: "القطعة",
   },
   {
-    id: "code",
-    numeric: false,
-    label: "رمز القطعة",
-  },
-  {
     id: "cars",
     numeric: true,
     label: "السيارات",
+  },
+  {
+    id: "code",
+    numeric: false,
+    label: "رمز القطعة",
   },
 
   {
@@ -180,7 +181,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           <Box display={"flex"} flexWrap="wrap" gap={2} padding="10px 0">
             <TextField
               variant="standard"
-              sx={{ minWidth: "300px" }}
+              sx={{ maxWidth: "300px" , width:"auto" }}
               label="البحث عن قطعة معينة"
               InputProps={{
                 endAdornment: <Search></Search>,
@@ -273,7 +274,7 @@ export default function PartsTable({
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+      <Paper sx={{ width: "100%", mb: 2 }} >
         <EnhancedTableToolbar
           onGenerateInvoice={() =>
             onGenerateInvoice(rows.filter((item) => selected.includes(item.id)))
@@ -281,7 +282,6 @@ export default function PartsTable({
           numSelected={selected.length}
         />
         <TableContainer>
-            
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
@@ -313,15 +313,25 @@ export default function PartsTable({
                     selected={isItemSelected}
                   >
                     <TableCell component="th" id={labelId} scope="row">
-                      {row.name}
+                      <div className="flex items-center gap-8">
+                        <img
+                          alt={row.name}
+                          height={65}
+                          width={65}
+                          className="transition duration-150 hover:scale-150"
+                          src={`${SERVER_URL}/${row.image}`}
+                        />
+                        <span>{row.name}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      {cars
+                        ?.filter((c) => row.cars.includes(c.id))
+                        .map((c) => c.name)
+                        .join(" , ")}
                     </TableCell>
                     <TableCell component="th" id={labelId} scope="row">
                       {row.code}
-                    </TableCell>
-                    <TableCell>
-                      {
-                        cars?.filter(c=>row.cars.includes(c.id)).map(c=>c.name).join(' , ')
-}
                     </TableCell>
                     <TableCell>{row.orginalPrice}</TableCell>
                     <TableCell>{row.sellingPrice}</TableCell>
@@ -336,8 +346,6 @@ export default function PartsTable({
               )}
             </TableBody>
           </Table>
-
-
         </TableContainer>
         <div className="flex p-4 justify-center">
           <Pagination

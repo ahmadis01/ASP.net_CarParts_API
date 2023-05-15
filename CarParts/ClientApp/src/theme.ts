@@ -4,9 +4,14 @@ import { createTheme } from "@mui/material";
 
 
 export const customTheme = createTheme({
+    
     palette: {
         mode: 'light',
-        
+        background:{
+            default:"#fafafa",
+            paper:"#ffffff"
+        },
+              
         primary: {
             100: "#d7dffb",
             200: "#afc0f6",
@@ -32,7 +37,24 @@ export const customTheme = createTheme({
             main: "#1e1e1e"
         },
 
+         
 
+    },
+
+    components:{
+        MuiCard:{
+            defaultProps:{
+                variant:'outlined'
+            }
+        },
+        MuiPaper:{
+            defaultProps:{
+                elevation:0,
+                variant:'outlined'
+                
+            }
+        }
+        
     }
 })
 

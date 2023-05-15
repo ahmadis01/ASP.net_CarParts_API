@@ -33,8 +33,7 @@ export default ({
     return (
         <div>
 
-            {/* <h2 className='mb-2'>فلترة القطع </h2> */}
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <FormControl size='small'>
                     <InputLabel id='carCategory' >تصنيف القطعة</InputLabel>
                     <Select onChange={(e) => onFilterChange(e.target.name, e.target.value)} name={'OrderBy' as keyof GetAllPartsParams} value={params.OrderBy ?? ''} label='تصنيف القطعة' labelId='carCategory'>
@@ -81,7 +80,6 @@ export default ({
                 </FormControl>
                 <FormControl   >
                     <DesktopDatePicker
-                        sx={{ height: 10 }}
                         label="تاريخ الإضافة"
                         format="MM/DD/YYYY"
                         value={params.Date}

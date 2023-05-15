@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { BrandItem } from "@/api/Brand/dto";
 import { Edit } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 type propsType = {
   carsList: GetAllCar[];
@@ -29,7 +30,7 @@ export default function CarsList(props: propsType) {
   const brandInfo = (id: number | string) => brands.find((b) => b.id == id);
   const getFileUrl = (url: string) => `${SERVER_URL}/${url}`;
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
       {props.carsList.map((car) => (
         <Card
           key={car.id}
@@ -70,23 +71,21 @@ export default function CarsList(props: propsType) {
             </Typography>
           </CardContent>
 
-          <CardActions>
-
-              <Button
-            
-
-                sx={{ flexGrow: 1 }}
-                variant="contained"
-                fullWidth
-                onClick={() => props.onDetails(car)}
-                >
+          <CardActions className="gap-2">
+            <Link
+              className="flex-grow"
+              to={{
+                pathname: `/products`,
+                search:`PageNumber=1&CarId=${car.id}`
+              }}
+            >
+              <Button variant="contained" fullWidth>
                 عرض القطع (20)
               </Button>
-              <Button variant="contained" >
-                <Edit></Edit>
-              </Button>
-
-         
+            </Link>
+            <Button variant="contained" onClick={() => props.onDetails(car)}>
+              <Edit></Edit>
+            </Button>
           </CardActions>
         </Card>
       ))}
