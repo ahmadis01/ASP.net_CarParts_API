@@ -9,7 +9,6 @@ namespace CarParts.Parameters
     {
         public int CountryId { get; set; } = 0;
         public int CarId { get; set; } = 0;
-        public int PartId { get; set; } = 0;
         public int BrandId { get; set; } = 0;
         public int StoreId { get; set; } = 0;
         public int PageSize { get; set; }

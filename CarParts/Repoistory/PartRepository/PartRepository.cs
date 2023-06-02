@@ -24,9 +24,15 @@ namespace CarParts.Repoistory.PartRepository
         }
         public async Task<GetPartDto> GetParts(PartParameters parameters)
         {
-            List<Part> parts;
-            parts = await Pagination(parameters);
+            var partsData = new GetPartDto();
+            var parts = await _context.Parts.OrderByDescending(p => p.CreatedAt)
+                    .Include(p => p.Brand)
+                    .Include(p => p.StoreParts)
+                    .Include(p => p.CarParts).ToListAsync();
             parts = Filter(parameters, parts);
+            partsData.TotalNumber = parts.Count;
+            parts = Pagination(parameters ,parts);
+
 
             if (!String.IsNullOrEmpty(parameters.Search.Trim()))
             {
@@ -38,9 +44,7 @@ namespace CarParts.Repoistory.PartRepository
             foreach (var partDto in partsDto)
                 partDto.Cars = _context.CarParts.Where(c => c.PartId == partDto.Id).Select(c => c.CarId).ToList();
 
-            var partsData = new GetPartDto();
             partsData.Parts = partsDto;
-            partsData.TotalNumber = partsData.Parts.Count();
             return partsData;
         }
         public async Task<GetPartData> AddPart(AddPartDto partDto)
@@ -161,26 +165,14 @@ namespace CarParts.Repoistory.PartRepository
             }
             return parts;
         }
-        public async Task<List<Part>> Pagination(PartParameters parameters)
+        public List<Part> Pagination(PartParameters parameters,List<Part> parts)
         {
-            var parts = new List<Part>();
             if (parameters.PageSize != 0 && parameters.PageNumber != 0)
             {
-                parts = await _context.Parts
-                    .OrderBy(p => p.CreatedAt)
-                    .Include(p => p.StoreParts)
-                    .Include(p => p.CarParts)
+                parts = parts
                     .Skip((parameters.PageNumber - 1) * parameters.PageSize)
                     .Take(parameters.PageSize)
-                    .ToListAsync();
-            }
-            else
-            {
-                parts = await _context.Parts
-                    .OrderBy(p => p.Id)
-                    .Include(p => p.StoreParts)
-                    .Include(p => p.CarParts)
-                    .ToListAsync();
+                    .ToList();
             }
             return parts;
         }
