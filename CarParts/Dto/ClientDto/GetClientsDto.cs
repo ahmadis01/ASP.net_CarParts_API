@@ -1,8 +1,6 @@
-﻿using CarParts.Models.Main;
-
-namespace CarParts.Dto.ClientDto
+﻿namespace CarParts.Dto.ClientDto
 {
-    public class UpdateClientDto
+    public class GetClientsDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -10,6 +8,6 @@ namespace CarParts.Dto.ClientDto
         public bool IsSeller { get; set; }
         public string? Email { get; set; }
         public string? Address { get; set; }
-
+        public double TotalAccount { get; set; } = 0;
     }
 }

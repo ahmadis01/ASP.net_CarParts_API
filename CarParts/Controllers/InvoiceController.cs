@@ -39,6 +39,14 @@ namespace CarParts.Controllers
             return Ok(invoice);
 
         }
+        [HttpGet("GetAccountClient/{clientId}")]
+        public async Task<IActionResult> GetAccountClient(int clientId)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var account = await _invoiceRepository.GetAccountClient(clientId);
+            return Ok(account); 
+        }
 
     }
 }
