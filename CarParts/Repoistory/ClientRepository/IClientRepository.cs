@@ -4,7 +4,7 @@ namespace CarParts.Repoistory.ClientRepository
 {
     public interface IClientRepository
     {
-        Task<IEnumerable<GetClientDto>> GetClients();
+        Task<IEnumerable<GetClientsDto>> GetClients();
         Task<GetClientDto> GetClient(int id);
         Task<IEnumerable<GetClientDto>> GetClient(string name);
         Task<GetClientDto> AddClient(AddClientDto clientDto);

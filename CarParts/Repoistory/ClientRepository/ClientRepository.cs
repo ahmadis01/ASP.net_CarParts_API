@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CarParts.Data;
 using CarParts.Dto.ClientDto;
+using CarParts.Dto.InvoiceDto;
 using CarParts.Models.Main;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,10 +16,14 @@ namespace CarParts.Repoistory.ClientRepository
             _context = context;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<GetClientDto>> GetClients()
+        public async Task<IEnumerable<GetClientsDto>> GetClients()
         {
             var clients = await _context.Clients.OrderBy(c => c.Id).ToListAsync();
-            var clientsDto = _mapper.Map<List<GetClientDto>>(clients);
+            var clientsDto = _mapper.Map<List<GetClientsDto>>(clients);
+            foreach (var client in clientsDto)
+            {
+                client.TotalAccount = await GetClientAccount(client.Id);
+            }
             return clientsDto;
         }
 
@@ -62,6 +67,26 @@ namespace CarParts.Repoistory.ClientRepository
             _context.Clients.Remove(client);
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public async Task<int> GetClientAccount(int clientId)
+        {
+            var client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
+            var importInovicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && i.IsImport && !i.Received)
+                .Select(i => new {
+                    Cost = i.Cost,
+                    Services = i.Services
+                }).ToListAsync();
+            int importCost = importInovicesAccount.Select(i => i.Cost).Sum() + importInovicesAccount.Select(i => i.Services).Sum();
+            var exportInvoicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && !i.IsImport && !i.Received)
+                .Select(i => new
+                {
+                    Cost = i.Cost,
+                    Services = i.Services
+                }).ToListAsync();
+            int exportCost = exportInvoicesAccount.Select(i => i.Cost).Sum() + exportInvoicesAccount.Select(i => i.Services).Sum();
+            var account = importCost - exportCost;
+            return account;
         }
 
     }

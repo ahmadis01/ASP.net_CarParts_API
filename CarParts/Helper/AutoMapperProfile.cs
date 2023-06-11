@@ -47,6 +47,7 @@ namespace CarParts.Helper
             //StoreCP
             CreateMap<StorePart, GetStorePartDto>();
             //Client
+            CreateMap<Client, GetClientsDto>();
             CreateMap<Client, GetClientDto>();
             CreateMap<AddClientDto, Client>();
             CreateMap<UpdateClientDto,Client>();
