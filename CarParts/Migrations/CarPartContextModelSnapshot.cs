@@ -277,11 +277,11 @@ namespace CarParts.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("InvoiceType")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsImport")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
@@ -522,11 +522,11 @@ namespace CarParts.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f543698a-d995-49a1-a596-4ed30206c12e",
+                            ConcurrencyStamp = "6b097bdb-e02b-4462-b1f3-dba151756493",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPDvqmcfnf5Wja/gydhs61FAGj7JdNpIP68H+XFjKQ0IqNE/njOLKunLhKO2lH8APg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFpg13gnTWzOygO5oiXnBHO6mTD+T3YLdZa4w8yQivO5fyDXWJ4xK1xQChl2w6W26g==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "Admin"
@@ -566,21 +566,21 @@ namespace CarParts.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "b45d87ca-dfd4-4774-a48b-5b3a8b6662a5",
+                            ConcurrencyStamp = "62b0b9b9-9687-4c0b-834f-738dcdb1fab7",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "f98a4899-cd51-4b5e-a7ed-f3d8842c22ee",
+                            ConcurrencyStamp = "79ef66e7-4825-491d-8245-ff754e6e1b0b",
                             Name = "Accountant",
                             NormalizedName = "ACCOUNTANT"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "0d0fd547-2dbf-4ea6-b43e-ec1e8172b2e6",
+                            ConcurrencyStamp = "50be81e6-a7be-4010-a4da-06d2e0370cb1",
                             Name = "DataEntry",
                             NormalizedName = "DATAENTRY"
                         });

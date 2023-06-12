@@ -249,8 +249,8 @@ namespace CarParts.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsImport = table.Column<bool>(type: "bit", nullable: false),
                     Cost = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClientId = table.Column<int>(type: "int", nullable: false),
                     Services = table.Column<int>(type: "int", nullable: false),
@@ -455,15 +455,15 @@ namespace CarParts.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "b45d87ca-dfd4-4774-a48b-5b3a8b6662a5", "Admin", "ADMIN" },
-                    { 2, "f98a4899-cd51-4b5e-a7ed-f3d8842c22ee", "Accountant", "ACCOUNTANT" },
-                    { 3, "0d0fd547-2dbf-4ea6-b43e-ec1e8172b2e6", "DataEntry", "DATAENTRY" }
+                    { 1, "62b0b9b9-9687-4c0b-834f-738dcdb1fab7", "Admin", "ADMIN" },
+                    { 2, "79ef66e7-4825-491d-8245-ff754e6e1b0b", "Accountant", "ACCOUNTANT" },
+                    { 3, "50be81e6-a7be-4010-a4da-06d2e0370cb1", "DataEntry", "DATAENTRY" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "f543698a-d995-49a1-a596-4ed30206c12e", null, false, false, null, null, "ADMIN", "AQAAAAEAACcQAAAAEPDvqmcfnf5Wja/gydhs61FAGj7JdNpIP68H+XFjKQ0IqNE/njOLKunLhKO2lH8APg==", null, false, null, false, "Admin" });
+                values: new object[] { 1, 0, "6b097bdb-e02b-4462-b1f3-dba151756493", null, false, false, null, null, "ADMIN", "AQAAAAEAACcQAAAAEFpg13gnTWzOygO5oiXnBHO6mTD+T3YLdZa4w8yQivO5fyDXWJ4xK1xQChl2w6W26g==", null, false, null, false, "Admin" });
 
             migrationBuilder.InsertData(
                 table: "Clients",

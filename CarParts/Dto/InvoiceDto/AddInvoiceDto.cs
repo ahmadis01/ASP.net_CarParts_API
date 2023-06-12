@@ -7,6 +7,7 @@ namespace CarParts.Dto.InvoiceDto
     {
         public DateTime Date { get; set; }
         public int Cost { get; set; } = 0;
+        public string Description { get; set; }
         public int ClientId { get; set; }
         public string? Notes { get; set; }
         public int Services { get; set; }

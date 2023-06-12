@@ -44,7 +44,8 @@ namespace CarParts.Repoistory.InvoiceRepository
             invoice.CreatedAt = DateTime.Now;
             var parts = invoiceDto.Parts;
             Move move = new Move();
-
+            var partsIds = invoiceDto.Parts.Select(p => p.PartId);
+            var storeParts = _context.StoreParts.Where(s => partsIds.Contains(s.PartId));
             var result = await _context.Invoices.AddAsync(invoice);
             await _context.SaveChangesAsync();
             if(invoiceDto.InvoiceType == InvoiceType.PurchaseInvoice || invoiceDto.InvoiceType == InvoiceType.SellInvoice)
@@ -54,8 +55,8 @@ namespace CarParts.Repoistory.InvoiceRepository
                     move.Price = part.Price;
                     move.CreatedAt = DateTime.Now;
                     move.Quantity = part.Quantity;
-                    var storePart = _context.StoreParts.Where(s => s.PartId == part.PartId && s.StoreId == part.StoreId).FirstOrDefaultAsync().Result;
-                    _ = invoiceDto.InvoiceType == InvoiceType.PurchaseInvoice ? storePart.Quantity -= part.Quantity : storePart.Quantity += part.Quantity;
+                    var storePart = storeParts.Where(s => s.PartId == part.PartId && s.StoreId == part.StoreId).FirstOrDefault();
+                    storePart.Quantity = invoiceDto.InvoiceType == InvoiceType.PurchaseInvoice ? storePart.Quantity += part.Quantity : storePart.Quantity -= part.Quantity;
                     move.StorePartId = storePart.Id;
                     await _context.Moves.AddAsync(move);
                     await _context.SaveChangesAsync();
@@ -92,7 +93,8 @@ namespace CarParts.Repoistory.InvoiceRepository
                 {
                     Cost = invoice.Cost,
                     Description = invoice.Description,
-                    InvoiceType = invoice.InvoiceType
+                    InvoiceType = invoice.InvoiceType,
+                    Services = invoice.Services
                 };
                 accountDto.Add(account);
             }
