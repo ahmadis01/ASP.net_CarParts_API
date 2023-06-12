@@ -1,4 +1,6 @@
-﻿namespace CarParts.Dto.InvoiceDto
+﻿using CarParts.Shared.Enums;
+
+namespace CarParts.Dto.InvoiceDto
 {
     public class GetInvoiceDto
     {
@@ -8,6 +10,6 @@
         public int ClientId { get; set; }
         public string? Notes { get; set; }
         public int Services { get; set; }
-        public bool Received { get; set; }
+        public InvoiceType InvoiceType { get; set; }
     }
 }

@@ -57,9 +57,6 @@ namespace CarParts.Repoistory.InvoiceRepository
                     if (invoice.IsImport)
                         storePart.Quantity -= part.Quantity;
                     else
-                    {
-
-                    }
                         storePart.Quantity += part.Quantity;
                     move.StorePartId = storePart.Id;
                     await _context.Moves.AddAsync(move);
@@ -89,13 +86,13 @@ namespace CarParts.Repoistory.InvoiceRepository
         }
         public async Task<GetAccountDto> GetAccountClient(int clientId)
         {
-            var importInovicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && i.IsImport && !i.Received)
+            var importInovicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && i.IsImport)
                 .Select(i => new {
                     Cost = i.Cost,
                     Services = i.Services
                 }).ToListAsync();
             double importCost = importInovicesAccount.Select(i => i.Cost).Sum() + importInovicesAccount.Select(i => i.Services).Sum();
-            var exportInvoicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && !i.IsImport && !i.Received)
+            var exportInvoicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && !i.IsImport)
                 .Select(i => new
                 {
                     Cost = i.Cost,

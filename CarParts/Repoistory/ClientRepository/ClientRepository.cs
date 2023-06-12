@@ -72,13 +72,13 @@ namespace CarParts.Repoistory.ClientRepository
         public async Task<int> GetClientAccount(int clientId)
         {
             var client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
-            var importInovicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && i.IsImport && !i.Received)
+            var importInovicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && i.IsImport)
                 .Select(i => new {
                     Cost = i.Cost,
                     Services = i.Services
                 }).ToListAsync();
             int importCost = importInovicesAccount.Select(i => i.Cost).Sum() + importInovicesAccount.Select(i => i.Services).Sum();
-            var exportInvoicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && !i.IsImport && !i.Received)
+            var exportInvoicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && !i.IsImport)
                 .Select(i => new
                 {
                     Cost = i.Cost,
