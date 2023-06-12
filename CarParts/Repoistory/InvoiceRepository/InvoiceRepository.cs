@@ -4,6 +4,7 @@ using CarParts.Dto.InvoiceDto;
 using CarParts.Models.Main;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using CarParts.Shared.Enums;
 
 namespace CarParts.Repoistory.InvoiceRepository
 {
@@ -46,7 +47,7 @@ namespace CarParts.Repoistory.InvoiceRepository
 
             var result = await _context.Invoices.AddAsync(invoice);
             await _context.SaveChangesAsync();
-            if(invoiceDto.Parts != null)
+            if(invoiceDto.InvoiceType == InvoiceType.PurchaseInvoice || invoiceDto.InvoiceType == InvoiceType.SellInvoice)
                 foreach (var part in invoiceDto.Parts)
                 {
                     move.InvoiceId = result.Entity.Id;
@@ -54,10 +55,7 @@ namespace CarParts.Repoistory.InvoiceRepository
                     move.CreatedAt = DateTime.Now;
                     move.Quantity = part.Quantity;
                     var storePart = _context.StoreParts.Where(s => s.PartId == part.PartId && s.StoreId == part.StoreId).FirstOrDefaultAsync().Result;
-                    if (invoice.IsImport)
-                        storePart.Quantity -= part.Quantity;
-                    else
-                        storePart.Quantity += part.Quantity;
+                    _ = invoiceDto.InvoiceType == InvoiceType.PurchaseInvoice ? storePart.Quantity -= part.Quantity : storePart.Quantity += part.Quantity;
                     move.StorePartId = storePart.Id;
                     await _context.Moves.AddAsync(move);
                     await _context.SaveChangesAsync();
@@ -84,28 +82,21 @@ namespace CarParts.Repoistory.InvoiceRepository
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
-        public async Task<GetAccountDto> GetAccountClient(int clientId)
+        public async Task<List<GetAccountDto>> GetAccountClient(int clientId)
         {
-            var importInovicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && i.IsImport)
-                .Select(i => new {
-                    Cost = i.Cost,
-                    Services = i.Services
-                }).ToListAsync();
-            double importCost = importInovicesAccount.Select(i => i.Cost).Sum() + importInovicesAccount.Select(i => i.Services).Sum();
-            var exportInvoicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && !i.IsImport)
-                .Select(i => new
-                {
-                    Cost = i.Cost,
-                    Services = i.Services
-                }).ToListAsync();
-            double exportCost = exportInvoicesAccount.Select(i => i.Cost).Sum() + exportInvoicesAccount.Select(i => i.Services).Sum();
-            var account = new GetAccountDto
+            List<GetAccountDto> accountDto = new List<GetAccountDto>();
+            var invoices = _context.Invoices.Where(i => i.ClientId == clientId).OrderByDescending(i => i.CreatedAt);
+            foreach (var invoice in invoices)
             {
-                ClientId = clientId,
-                ExportCost = exportCost,
-                ImportCost = importCost
-            };
-            return account;
+                var account = new GetAccountDto
+                {
+                    Cost = invoice.Cost,
+                    Description = invoice.Description,
+                    InvoiceType = invoice.InvoiceType
+                };
+                accountDto.Add(account);
+            }
+            return accountDto;
         }
     }
 }

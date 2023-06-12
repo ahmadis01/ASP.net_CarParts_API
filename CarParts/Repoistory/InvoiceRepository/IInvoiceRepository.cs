@@ -9,7 +9,7 @@ namespace CarParts.Repoistory.InvoiceRepository
         Task<IEnumerable<GetInvoiceDto>> GetInvoiceByClient(int clientId);
         Task<GetInvoiceDto> AddInvoice(AddInvoiceDto invoiceDto);
         Task<GetInvoiceDto> UpdateInvoice(UpdateInvoiceDto invoiceDto);
-        Task<GetAccountDto> GetAccountClient(int clientId);
+        Task<List<GetAccountDto>> GetAccountClient(int clientId);
         bool DeleteInvoice(int id);
     }
 }

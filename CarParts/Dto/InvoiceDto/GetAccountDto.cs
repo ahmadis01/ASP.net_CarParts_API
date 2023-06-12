@@ -1,10 +1,11 @@
-﻿namespace CarParts.Dto.InvoiceDto
+﻿using CarParts.Shared.Enums;
+
+namespace CarParts.Dto.InvoiceDto
 {
     public class GetAccountDto
     {
-        public int ClientId { get; set; }
-        public double ImportCost { get; set; }
-        public double ExportCost { get; set; }
-
+        public int Cost { get; set; }
+        public string Description { get; set; }
+        public InvoiceType InvoiceType { get; set; }
     }
 }
