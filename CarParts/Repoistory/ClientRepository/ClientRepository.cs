@@ -20,10 +20,10 @@ namespace CarParts.Repoistory.ClientRepository
         {
             var clients = await _context.Clients.OrderBy(c => c.Id).ToListAsync();
             var clientsDto = _mapper.Map<List<GetClientsDto>>(clients);
-            foreach (var client in clientsDto)
-            {
-                client.TotalAccount = await GetClientAccount(client.Id);
-            }
+            //foreach (var client in clientsDto)
+            //{
+            //    client.TotalAccount = await GetClientAccount(client.Id);
+            //}
             return clientsDto;
         }
 
@@ -69,25 +69,25 @@ namespace CarParts.Repoistory.ClientRepository
             return saved > 0 ? true : false;
         }
 
-        public async Task<int> GetClientAccount(int clientId)
-        {
-            var client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
-            var importInovicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && i.IsImport && !i.Received)
-                .Select(i => new {
-                    Cost = i.Cost,
-                    Services = i.Services
-                }).ToListAsync();
-            int importCost = importInovicesAccount.Select(i => i.Cost).Sum() + importInovicesAccount.Select(i => i.Services).Sum();
-            var exportInvoicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && !i.IsImport && !i.Received)
-                .Select(i => new
-                {
-                    Cost = i.Cost,
-                    Services = i.Services
-                }).ToListAsync();
-            int exportCost = exportInvoicesAccount.Select(i => i.Cost).Sum() + exportInvoicesAccount.Select(i => i.Services).Sum();
-            var account = importCost - exportCost;
-            return account;
-        }
+        //public async Task<int> GetClientAccount(int clientId)
+        //{
+        //    var client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == clientId);
+        //    var importInovicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && i.IsImport)
+        //        .Select(i => new {
+        //            Cost = i.Cost,
+        //            Services = i.Services
+        //        }).ToListAsync();
+        //    int importCost = importInovicesAccount.Select(i => i.Cost).Sum() + importInovicesAccount.Select(i => i.Services).Sum();
+        //    var exportInvoicesAccount = await _context.Invoices.Where(i => i.ClientId == clientId && !i.IsImport)
+        //        .Select(i => new
+        //        {
+        //            Cost = i.Cost,
+        //            Services = i.Services
+        //        }).ToListAsync();
+        //    int exportCost = exportInvoicesAccount.Select(i => i.Cost).Sum() + exportInvoicesAccount.Select(i => i.Services).Sum();
+        //    var account = importCost - exportCost;
+        //    return account;
+        //}
 
     }
 }
