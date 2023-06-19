@@ -4,22 +4,28 @@ using CarParts.Dto.CategoryDto;
 using CarParts.Dto.PartDto;
 using CarParts.Models.Main;
 using Microsoft.EntityFrameworkCore;
+using CarParts.Base.BaseRepository;
+using Microsoft.Extensions.Hosting;
+using CarParts.SharedKernal.Consts;
 
 namespace CarParts.Repoistory.CategoryRepository
 {
-    public class CategoryRepoistory : ICategoryRepository
+    public class CategoryRepoistory : BaseRepository , ICategoryRepository 
     {
         private readonly CarPartContext context;
         private readonly IMapper mapper;
+        private readonly IHostEnvironment Environment;
 
-        public CategoryRepoistory(CarPartContext context, IMapper mapper)
+        public CategoryRepoistory(CarPartContext context, IMapper mapper , IHostEnvironment environment) : base(environment)
         {
             this.context = context;
-            this.mapper = mapper;
+            this.mapper = mapper;            
         }
         public async Task<GetCategoryDto> AddCategory(AddCategoryDto categoryDto)
         {
             var category = mapper.Map<Category>(categoryDto);
+            category.Image = await UploadFile(categoryDto.Image, FilePathConsts.CategoryFilePath);
+            
             var result = await context.AddAsync(category);
             await context.SaveChangesAsync();
             var getCategory = mapper.Map<GetCategoryDto>(result.Entity);

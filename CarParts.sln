@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SharedKernal", "SharedKerna
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarParts.SharedKernal", "CarParts.SharedKernal\CarParts.SharedKernal.csproj", "{C45F502D-089E-4551-9446-E31E122A325B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarParts.Base", "CarParts.Base\CarParts.Base.csproj", "{ACA69AB7-291B-4CBF-9EF1-D31319D9B5BB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{C45F502D-089E-4551-9446-E31E122A325B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C45F502D-089E-4551-9446-E31E122A325B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C45F502D-089E-4551-9446-E31E122A325B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACA69AB7-291B-4CBF-9EF1-D31319D9B5BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACA69AB7-291B-4CBF-9EF1-D31319D9B5BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACA69AB7-291B-4CBF-9EF1-D31319D9B5BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACA69AB7-291B-4CBF-9EF1-D31319D9B5BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +77,7 @@ Global
 		{0A44AA41-2A58-4EA1-8A20-903B43624EC2} = {6B8F2583-8186-4C03-A8C6-61F6A1E4175C}
 		{EA339060-24CC-4C7F-AB19-8419645910F5} = {6B8F2583-8186-4C03-A8C6-61F6A1E4175C}
 		{C45F502D-089E-4551-9446-E31E122A325B} = {A64F6EBA-161A-4B7E-9260-C5861709DDD8}
+		{ACA69AB7-291B-4CBF-9EF1-D31319D9B5BB} = {6B8F2583-8186-4C03-A8C6-61F6A1E4175C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1D9448B6-023E-43F3-B108-2FB9A1A31F52}

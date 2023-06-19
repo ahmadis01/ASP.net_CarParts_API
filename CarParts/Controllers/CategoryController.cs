@@ -32,7 +32,7 @@ namespace CarParts.Controllers
             return Ok(category);
         }
         [HttpPost]
-        public async Task<IActionResult> AddCategory(AddCategoryDto categoryDto)
+        public async Task<IActionResult> AddCategory([FromFormAttribute] AddCategoryDto categoryDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

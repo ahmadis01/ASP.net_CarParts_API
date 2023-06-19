@@ -1,19 +1,21 @@
 ﻿using AutoMapper;
 using CarParts.SqlServer.DataBase;
+using CarParts.SharedKernal.Consts;
 using CarParts.Dto.CarDto;
 using CarParts.Models.Main;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using CarParts.Base.BaseRepository;
 
 namespace CarParts.Repoistory.CarRepository
 {
-    public class CarRepository : ICarRepository
+    public class CarRepository : BaseRepository, ICarRepository
     {
         private readonly CarPartContext _context;
         private readonly IMapper _mapper;
         private readonly IHostEnvironment _environment;
 
-        public CarRepository(CarPartContext context, IMapper mapper, IHostEnvironment environment)
+        public CarRepository(CarPartContext context, IMapper mapper, IHostEnvironment environment):base(environment)
         {
             _context = context;
             _mapper = mapper;
@@ -23,39 +25,44 @@ namespace CarParts.Repoistory.CarRepository
         public async Task<GetCarDto> AddCar(AddCarDto carDto)
         {
             var car = _mapper.Map<Car>(carDto);
-            var extension = Path.GetExtension(carDto.Image.FileName);
-            var fileName = DateTime.Now.Ticks.ToString();
-            var path = Path.Combine("wwwroot/Images/Cars", fileName+ extension);
-            car.Image = Path.Combine("/Images/Cars", fileName+ extension);
+            car.Image = await UploadFile(carDto.Image, FilePathConsts.CarFilePath);
             car.CreatedAt = DateTime.Now;
-            using (FileStream stream = new FileStream(path, FileMode.Create))
-            {
-                await carDto.Image.CopyToAsync(stream);
-                stream.Close();
-            }
             var result = await _context.Cars.AddAsync(car);
             await _context.SaveChangesAsync();
             var getCar = _mapper.Map<GetCarDto>(result.Entity);
-            getCar.CountryId = result.Entity.Brand.CountryId;
             return getCar;
         }
 
         public async Task<IEnumerable<GetCarDto>> GetCars()
         {
-            var cars = await _context.Cars.OrderBy(a => a.Id).Select(c => new GetCarDto {
+            var carIds = await _context.Cars.Select(c => c.Id).ToListAsync();
+            var carParts = await _context.CarParts.Where(p => carIds.Contains(p.CarId)).Select(p => p.PartId).ToListAsync();
+            var parts = await _context.Parts.Where(p => carParts.Contains(p.Id)).Select(p => p.Id).ToListAsync();
+            var storeParts = await _context.StoreParts.Where(s => parts.Contains(s.PartId) && s.Quantity != 0).Select(s => s.PartId).ToListAsync();
+            parts = storeParts.Distinct().ToList();
+            carParts = parts.Distinct().ToList();
+            var totalParts = carParts.Count;
+            var cars = await _context.Cars.OrderBy(c => c.Id).Select(c => new GetCarDto
+            {
                 Id = c.Id,
                 Name = c.Name,
                 BrandId = c.BrandId,
                 CarCategoryId = c.CarCategoryId,
+                CountryId = c.Brand.CountryId,
                 Image = c.Image,
                 Model = c.Model,
-                TotalParts = c.CarParts.Count(),
-                CountryId = c.Brand.CountryId
+                TotalParts = totalParts
             }).ToListAsync();
             return cars;
         }
         public async Task<GetCarDto> GetCar(int id)
         {
+            var carParts = await _context.CarParts.Where(c => c.CarId == id).Select(c => c.PartId).ToListAsync();
+            var parts = await _context.Parts.Where(p => carParts.Contains(p.Id)).Select(p => p.Id).ToListAsync();
+            var storeParts = await _context.StoreParts.Where(s => parts.Contains(s.PartId) && s.Quantity != 0).Select(s => s.PartId).ToListAsync();
+            parts = storeParts.Distinct().ToList();
+            carParts = parts.Distinct().ToList();
+            var totalCount = carParts.Count;
             var car = await _context.Cars.Select(c => new GetCarDto
             {
                 Id = c.Id,
@@ -65,7 +72,7 @@ namespace CarParts.Repoistory.CarRepository
                 Image = c.Image,
                 Name = c.Name,
                 Model = c.Model,
-                TotalParts = c.CarParts.Count()
+                TotalParts = totalCount
             }).FirstOrDefaultAsync(c => c.Id == id);
             return car;
         }
