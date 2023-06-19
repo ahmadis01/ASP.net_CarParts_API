@@ -22,14 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\Images\Brands\" />
     <Folder Include="wwwroot\Images\Cars\" />
     <Folder Include="wwwroot\Images\Category\" />
     <Folder Include="wwwroot\Images\Parts\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\Images\Brands\photo_2022-06-29_16-11-15.jpg" />
-    <None Include="wwwroot\Images\Brands\ss.jpg" />
   </ItemGroup>
 
   <ItemGroup>
