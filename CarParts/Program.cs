@@ -1,6 +1,5 @@
-using CarParts.Data;
+using CarParts.SqlServer.DataBase;
 using CarParts.Models.Security;
-using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +18,7 @@ using CarParts.Repoistory.PartRepository;
 using CarParts.Repoistory.StoreRepository;
 using CarParts.Repoistory.ClientRepository;
 using CarParts.Repoistory.InvoiceRepository;
+using CarParts.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -27,19 +27,19 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddScoped<ICarRepository, CarRepository>();
-builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-builder.Services.AddScoped<ICountryRepository, CountryRepository>();
-builder.Services.AddScoped<IBrandRepository, BrandRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepoistory>();
-builder.Services.AddScoped<IStoreRepository, StoreRepository>();
-builder.Services.AddScoped<IPartRepository, PartRepository>();
-builder.Services.AddScoped<IClientRepository, ClientRepository>();
-builder.Services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+builder.Services.AddTransient<ICarRepository, CarRepository>();
+builder.Services.AddTransient<IAuthRepository, AuthRepository>();
+builder.Services.AddTransient<ICountryRepository, CountryRepository>();
+builder.Services.AddTransient<IBrandRepository, BrandRepository>();
+builder.Services.AddTransient<ICategoryRepository, CategoryRepoistory>();
+builder.Services.AddTransient<IStoreRepository, StoreRepository>();
+builder.Services.AddTransient<IPartRepository, PartRepository>();
+builder.Services.AddTransient<IClientRepository, ClientRepository>();
+builder.Services.AddTransient<IInvoiceRepository, InvoiceRepository>();
+builder.Services.AddTransient<IBrandRepository, BrandRepository>();
 builder.Services.AddTransient<BrandsSeed>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IBrandRepository, BrandRepository>();
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -122,6 +122,18 @@ builder.Services.AddCors(o =>
 #endregion
 
 var app = builder.Build();
+
+using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+
+    var dbcontext = services.GetRequiredService<CarPartContext>();
+    var pendingMigrations = await dbcontext.Database.GetPendingMigrationsAsync();
+    if (pendingMigrations.Any())
+    {
+        await dbcontext.Database.MigrateAsync();
+    }
+}
 
 if (args.Length == 1 && args[0].ToLower() == "seed")
     Seed(app);

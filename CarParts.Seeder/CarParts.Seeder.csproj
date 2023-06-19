@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CarParts.Dto\CarParts.Dto.csproj" />
+    <ProjectReference Include="..\CarParts.Models\CarParts.Models.csproj" />
+    <ProjectReference Include="..\CarParts.SqlServer\CarParts.SqlServer.csproj" />
+  </ItemGroup>
+
+</Project>

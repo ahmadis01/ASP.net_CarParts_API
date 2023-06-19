@@ -1,8 +1,8 @@
 ﻿using CarParts.Dto.PartDto;
-using CarParts.Parameters;
 using CarParts.Repoistory.PartRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CarParts.SharedKernal.Parameters;
 
 namespace CarParts.Controllers
 {

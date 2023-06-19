@@ -11,7 +11,7 @@ using CarParts.Dto.StoreDto;
 using CarParts.Dto.StorePartDto;
 using CarParts.Models.Main;
 
-namespace CarParts.Helper
+namespace CarParts.Dto
 {
     public class AutoMapperProfile : Profile
     {
