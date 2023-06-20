@@ -22,7 +22,7 @@
     <ProjectReference Include="..\CarParts.Models\CarParts.Models.csproj" />
     <ProjectReference Include="..\CarParts.SharedKernal\CarParts.SharedKernal.csproj" />
     <ProjectReference Include="..\CarParts.SqlServer\CarParts.SqlServer.csproj" />
-    <ProjectReference Include="..\SharedKernal\CarParts.SharedKernal.csproj" />
+    <ProjectReference Include="..\CarParts.SharedKernal\CarParts.SharedKernal.csproj" />
   </ItemGroup>
 
 </Project>
