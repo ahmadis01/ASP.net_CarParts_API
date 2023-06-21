@@ -43,7 +43,8 @@ namespace CarParts.SqlServer.DataBase
             {
                 Id = 1, // primary key
                 UserName = "Admin",
-                NormalizedUserName = "ADMIN".ToUpper()
+                NormalizedUserName = "ADMIN".ToUpper() ,
+                SecurityStamp = Guid.NewGuid().ToString()
             };
             user.PasswordHash = hasher.HashPassword(user, "Admin");
             //Seeding the User to AspNetUsers table

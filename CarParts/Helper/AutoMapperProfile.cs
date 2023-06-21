@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CarParts.Dto.BrandDto;
+using CarParts.Dto.CarCategoryDto;
 using CarParts.Dto.CarDto;
 using CarParts.Dto.CarPartsDto;
 using CarParts.Dto.CategoryDto;
@@ -55,6 +56,9 @@ namespace CarParts.Helper
             CreateMap<Invoice, GetInvoiceDto>();
             CreateMap<UpdateInvoiceDto, Invoice>();
             CreateMap<AddInvoiceDto, Invoice>();
+            //CarCategory
+            CreateMap<CarCategory, GetCarCategoryDto>();
+            CreateMap<AddCarCategoryDto, CarCategory>();
         }
     }
 }

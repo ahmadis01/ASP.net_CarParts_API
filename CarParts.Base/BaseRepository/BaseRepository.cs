@@ -10,16 +10,16 @@ namespace CarParts.Base.BaseRepository
 {
     public class BaseRepository
     {
-        private readonly IHostEnvironment Environment;
+        private readonly IHostEnvironment _environment;
         public BaseRepository(IHostEnvironment environment)
         {
-            this.Environment = environment;
+            _environment = environment;
         }
         public async Task<string> UploadFile(IFormFile file , string path)
         {
             var extension = Path.GetExtension(file.FileName);
             var fileName = Guid.NewGuid();
-            var fullPath = Path.Combine(Environment.ContentRootPath + "wwwroot" , path, fileName + extension);
+            var fullPath = Path.Combine(_environment.ContentRootPath + "wwwroot" , path, fileName + extension);
             string returnedPath = Path.Combine(path, fileName + extension);
             using (FileStream stream = new FileStream(fullPath, FileMode.Create))
             {

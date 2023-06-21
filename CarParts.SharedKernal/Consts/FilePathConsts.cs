@@ -8,9 +8,9 @@ namespace CarParts.SharedKernal.Consts
 {
     public class FilePathConsts
     {
-        public static string CategoryFilePath => $"Images/Category/";
-        public static string CarFilePath => $"Images/Car/";
-        public static string PartFilePath => $"Images/Part/";
+        public static string CategoryFilePath => $"Images/Categories/";
+        public static string CarFilePath => $"Images/Cars/";
+        public static string PartFilePath => $"Images/Parts/";
 
     }
 }

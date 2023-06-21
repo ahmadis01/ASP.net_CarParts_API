@@ -19,6 +19,7 @@ using CarParts.Repoistory.StoreRepository;
 using CarParts.Repoistory.ClientRepository;
 using CarParts.Repoistory.InvoiceRepository;
 using CarParts.Data;
+using CarParts.Repositories.CarCategoryRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -37,6 +38,7 @@ builder.Services.AddTransient<IPartRepository, PartRepository>();
 builder.Services.AddTransient<IClientRepository, ClientRepository>();
 builder.Services.AddTransient<IInvoiceRepository, InvoiceRepository>();
 builder.Services.AddTransient<IBrandRepository, BrandRepository>();
+builder.Services.AddTransient<ICarCategoryRepository, CarCategoryRepository>();
 builder.Services.AddTransient<BrandsSeed>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);   
 builder.Services.AddHttpContextAccessor();
