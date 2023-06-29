@@ -39,7 +39,7 @@ builder.Services.AddTransient<IClientRepository, ClientRepository>();
 builder.Services.AddTransient<IInvoiceRepository, InvoiceRepository>();
 builder.Services.AddTransient<IBrandRepository, BrandRepository>();
 builder.Services.AddTransient<ICarCategoryRepository, CarCategoryRepository>();
-builder.Services.AddTransient<BrandsSeed>();
+builder.Services.AddTransient<Seeder>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);   
 builder.Services.AddHttpContextAccessor();
 
@@ -78,7 +78,7 @@ o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddIdentity<User , IdentityRole<int>>(identity =>
 {
-    identity.Password.RequiredLength = 4;
+    identity.Password.RequiredLength = 6;
     identity.Password.RequireNonAlphanumeric = false;
     identity.Password.RequireLowercase = false;
     identity.Password.RequireUppercase = false;
@@ -125,17 +125,6 @@ builder.Services.AddCors(o =>
 
 var app = builder.Build();
 
-using (var serviceScope = app.Services.CreateScope())
-{
-    var services = serviceScope.ServiceProvider;
-
-    var dbcontext = services.GetRequiredService<CarPartContext>();
-    var pendingMigrations = await dbcontext.Database.GetPendingMigrationsAsync();
-    if (pendingMigrations.Any())
-    {
-        await dbcontext.Database.MigrateAsync();
-    }
-}
 
 if (args.Length == 1 && args[0].ToLower() == "seed")
     Seed(app);
@@ -147,17 +136,14 @@ void Seed(IHost app)
 
     using (var scope = scopedFactory.CreateScope())
     {
-        var service = scope.ServiceProvider.GetService<BrandsSeed>();
+        var service = scope.ServiceProvider.GetService<Seeder>();
         service.SeedData();
     }
 }
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI();
+if (app.Environment.IsProduction())
 {
     app.UseDeveloperExceptionPage();
 }
@@ -181,7 +167,7 @@ app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
-    var service = scope.ServiceProvider.GetService<BrandsSeed>();
+    var service = scope.ServiceProvider.GetService<Seeder>();
     await service.SeedData();
 }
 app.Run();

@@ -44,11 +44,13 @@ namespace CarParts.Repoistory.InvoiceRepository
             invoice.CreatedAt = DateTime.Now;
             var parts = invoiceDto.Parts;
             Move move = new Move();
-            var partsIds = invoiceDto.Parts.Select(p => p.PartId);
-            var storeParts = _context.StoreParts.Where(s => partsIds.Contains(s.PartId));
+
             var result = await _context.Invoices.AddAsync(invoice);
             await _context.SaveChangesAsync();
             if(invoiceDto.InvoiceType == InvoiceType.PurchaseInvoice || invoiceDto.InvoiceType == InvoiceType.SellInvoice)
+            {
+                var partsIds = invoiceDto.Parts.Select(p => p.PartId);
+                var storeParts = _context.StoreParts.Where(s => partsIds.Contains(s.PartId));
                 foreach (var part in invoiceDto.Parts)
                 {
                     move.InvoiceId = result.Entity.Id;
@@ -62,6 +64,7 @@ namespace CarParts.Repoistory.InvoiceRepository
                     await _context.SaveChangesAsync();
                     _context.StoreParts.Update(storePart);
                 }
+            }         
             await _context.SaveChangesAsync();
             var getInvoice = _mapper.Map<GetInvoiceDto>(result.Entity);
             return getInvoice;

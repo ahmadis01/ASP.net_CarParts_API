@@ -30,42 +30,8 @@ namespace CarParts.SqlServer.DataBase
                 .OnDelete(DeleteBehavior.Restrict);
 
             //Seeding a  'Administrator' role to AspNetRoles table
-            builder.Entity<IdentityRole<int>>().HasData(
-                new IdentityRole<int> { Id = 1, Name = "Admin", NormalizedName = "ADMIN".ToUpper() },
-                new IdentityRole<int> { Id = 2, Name = "Accountant", NormalizedName = "ACCOUNTANT".ToUpper() },
-                new IdentityRole<int> { Id = 3, Name = "DataEntry", NormalizedName = "DATAENTRY".ToUpper() }
-                );
 
-
-            //a hasher to hash the password before seeding the user to the db
-            var hasher = new PasswordHasher<IdentityUser<int>>();
-            var user = new User
-            {
-                Id = 1, // primary key
-                UserName = "Admin",
-                NormalizedUserName = "ADMIN".ToUpper() ,
-                SecurityStamp = Guid.NewGuid().ToString()
-            };
-            user.PasswordHash = hasher.HashPassword(user, "Admin");
-            //Seeding the User to AspNetUsers table
-            builder.Entity<User>().HasData(user);
-
-
-            //Seeding the relation between our user and role to AspNetUserRoles table
-            builder.Entity<IdentityUserRole<int>>().HasData(
-            new IdentityUserRole<int>
-            {
-                RoleId = 1,
-                UserId = 1
-            });
-            var client = new Client
-            {
-                Id = 1,
-                Name = "زبون مفرق"
-            };
-            builder.Entity<Client>().HasData(client);
         }
-
         #region - properties -
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Car> Cars { get; set; }

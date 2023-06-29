@@ -17,7 +17,7 @@ namespace CarParts.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "6.0.18")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -225,14 +225,6 @@ namespace CarParts.SqlServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Clients");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            IsSeller = false,
-                            Name = "زبون مفرق"
-                        });
                 });
 
             modelBuilder.Entity("CarParts.Models.Main.Country", b =>
@@ -529,21 +521,6 @@ namespace CarParts.SqlServer.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "4db2bbc3-5951-49e3-867c-2edc565ab005",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKAcX5dAp6ybbYHYBicSVgKK+HSg3T5G6WBy1UMvuIv1mmiJKz+fKHr5L2F1+VFjPw==",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            UserName = "Admin"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
@@ -574,29 +551,6 @@ namespace CarParts.SqlServer.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ConcurrencyStamp = "91d4df76-be36-4952-9e10-5cdff9eb949a",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ConcurrencyStamp = "73636b8d-24a6-4cea-9400-3fca06d01612",
-                            Name = "Accountant",
-                            NormalizedName = "ACCOUNTANT"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ConcurrencyStamp = "9d47e05f-ac4f-418d-b224-46b89515525b",
-                            Name = "DataEntry",
-                            NormalizedName = "DATAENTRY"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -681,13 +635,6 @@ namespace CarParts.SqlServer.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            RoleId = 1
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
