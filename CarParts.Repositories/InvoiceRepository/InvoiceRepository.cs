@@ -44,24 +44,31 @@ namespace CarParts.Repoistory.InvoiceRepository
             invoice.CreatedAt = DateTime.Now;
             var parts = invoiceDto.Parts;
             Move move = new Move();
-            var partsIds = invoiceDto.Parts.Select(p => p.PartId);
-            var storeParts = _context.StoreParts.Where(s => partsIds.Contains(s.PartId));
+
             var result = await _context.Invoices.AddAsync(invoice);
             await _context.SaveChangesAsync();
             if(invoiceDto.InvoiceType == InvoiceType.PurchaseInvoice || invoiceDto.InvoiceType == InvoiceType.SellInvoice)
+            {
+                var moves = new List<Move>();
+                var partsIds = invoiceDto.Parts.Select(p => p.PartId);
+                var storeParts = _context.StoreParts.Where(s => partsIds.Contains(s.PartId));
                 foreach (var part in invoiceDto.Parts)
                 {
-                    move.InvoiceId = result.Entity.Id;
-                    move.Price = part.Price;
-                    move.CreatedAt = DateTime.Now;
-                    move.Quantity = part.Quantity;
+                    moves.Add(new Move
+                    {
+                        InvoiceId = invoice.Id,
+                        StorePartId = storeParts.Where(s => s.PartId == part.PartId && s.StoreId == part.StoreId).Select(s => s.Id).FirstOrDefault(),
+                        Quantity = part.Quantity,
+                        CreatedAt = DateTime.Now
+                    });
                     var storePart = storeParts.Where(s => s.PartId == part.PartId && s.StoreId == part.StoreId).FirstOrDefault();
                     storePart.Quantity = invoiceDto.InvoiceType == InvoiceType.PurchaseInvoice ? storePart.Quantity += part.Quantity : storePart.Quantity -= part.Quantity;
-                    move.StorePartId = storePart.Id;
-                    await _context.Moves.AddAsync(move);
-                    await _context.SaveChangesAsync();
                     _context.StoreParts.Update(storePart);
                 }
+                await _context.Moves.AddRangeAsync(moves);
+                await _context.SaveChangesAsync();
+
+            }         
             await _context.SaveChangesAsync();
             var getInvoice = _mapper.Map<GetInvoiceDto>(result.Entity);
             return getInvoice;

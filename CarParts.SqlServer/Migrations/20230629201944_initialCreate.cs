@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CarParts.SqlServer.Migrations
 {
-    public partial class init : Migration
+    public partial class initialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -449,31 +449,6 @@ namespace CarParts.SqlServer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { 1, "91d4df76-be36-4952-9e10-5cdff9eb949a", "Admin", "ADMIN" },
-                    { 2, "73636b8d-24a6-4cea-9400-3fca06d01612", "Accountant", "ACCOUNTANT" },
-                    { 3, "9d47e05f-ac4f-418d-b224-46b89515525b", "DataEntry", "DATAENTRY" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, "4db2bbc3-5951-49e3-867c-2edc565ab005", null, false, false, null, null, "ADMIN", "AQAAAAEAACcQAAAAEKAcX5dAp6ybbYHYBicSVgKK+HSg3T5G6WBy1UMvuIv1mmiJKz+fKHr5L2F1+VFjPw==", null, false, null, false, "Admin" });
-
-            migrationBuilder.InsertData(
-                table: "Clients",
-                columns: new[] { "Id", "Address", "CreatedAt", "DeletedAt", "Email", "IsSeller", "Name", "PhoneNumber", "UpdatedAt" },
-                values: new object[] { 1, null, null, null, null, false, "زبون مفرق", null, null });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUserRoles",
-                columns: new[] { "RoleId", "UserId" },
-                values: new object[] { 1, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
