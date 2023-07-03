@@ -8,5 +8,6 @@ namespace CarParts.Dto.InvoiceDto
         public string Description { get; set; }
         public int Services { get; set; }
         public InvoiceType InvoiceType { get; set; }
+        public DateTime Date { get; set; }
     }
 }

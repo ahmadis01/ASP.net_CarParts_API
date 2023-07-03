@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarParts.SqlServer.Migrations
 {
     [DbContext(typeof(CarPartContext))]
-    [Migration("20230629201944_initialCreate")]
+    [Migration("20230629225743_initialCreate")]
     partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

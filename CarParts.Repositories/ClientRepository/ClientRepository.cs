@@ -5,39 +5,61 @@ using CarParts.Dto.InvoiceDto;
 using CarParts.Models.Main;
 using Microsoft.EntityFrameworkCore;
 using CarParts.SharedKernal.Enums;
+using CarParts.Repositories.SharedRepository;
 
 namespace CarParts.Repoistory.ClientRepository
 {
     public class ClientRepository : IClientRepository
     {
         private readonly CarPartContext _context;
+        private readonly ISharedRepository _sharedRepository;
         private readonly IMapper _mapper;
-        public ClientRepository(CarPartContext context,IMapper mapper)
+        public ClientRepository(CarPartContext context, IMapper mapper, ISharedRepository sharedRepository)
         {
             _context = context;
             _mapper = mapper;
+            _sharedRepository = sharedRepository;
         }
         public async Task<IEnumerable<GetClientsDto>> GetClients()
         {
-            var clients = await _context.Clients.OrderBy(c => c.Id).ToListAsync();
-            var clientsDto = _mapper.Map<List<GetClientsDto>>(clients);
-            foreach (var client in clientsDto)
+            var clients = await _context.Clients.OrderBy(c => c.Id).Select(c => new 
             {
-                client.TotalAccount = await GetClientAccount(client.Id);
+                Id = c.Id,
+                Name = c.Name,
+                Address = c.Address,
+                Email = c.Email,
+                PhoneNumber = c.PhoneNumber,
+                IsSeller = c.IsSeller,
+                Invoices = c.Invoices,
+            }).ToListAsync();
+            var clientsDto = new List<GetClientsDto>();
+            foreach (var client in clients)
+            {
+                clientsDto.Add(new GetClientsDto
+                {
+                    Id = client.Id,
+                    Address = client.Address,
+                    Name = client.Name,
+                    Email = client.Email,
+                    PhoneNumber = client.PhoneNumber,
+                    IsSeller = client.IsSeller,
+                    TotalAccount = await _sharedRepository.CalculateTotalAccount(client.Invoices)
+                });
             }
             return clientsDto;
         }
 
         public async Task<GetClientDto> GetClient(int id)
         {
-            var client = await _context.Clients.FirstOrDefaultAsync(c => c.Id == id);
+            var client = await _context.Clients.Include(c => c.Invoices).FirstOrDefaultAsync(c => c.Id == id);
             var clientDto =  _mapper.Map<GetClientDto>(client);
+            clientDto.TotalAccount = await _sharedRepository.CalculateTotalAccount(client.Invoices);
             return clientDto;
         }
 
         public async Task<IEnumerable<GetClientDto>> GetClient(string name)
         {
-            var clients = await _context.Clients.Where(c => c.Name == name).ToListAsync();
+            var clients = await _context.Clients.Include(c => c.Invoices).Where(c => c.Name == name).ToListAsync();
             var clientsDto = _mapper.Map<List<GetClientDto>>(clients);
             return clientsDto;
         }
@@ -68,23 +90,6 @@ namespace CarParts.Repoistory.ClientRepository
             _context.Clients.Remove(client);
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
-        }
-
-        public async Task<int> GetClientAccount(int clientId)
-        {
-            var totalAccount = 0;
-            var invoices = _context.Invoices.Where(i => i.ClientId == clientId).OrderByDescending(i => i.CreatedAt);
-            foreach (var invoice in invoices)
-            {
-                if (invoice.InvoiceType == InvoiceType.PurchaseInvoice || invoice.InvoiceType == InvoiceType.OutgoingPayment)
-                {
-                    totalAccount += invoice.Cost + invoice.Services;
-                }
-                else if (invoice.InvoiceType == InvoiceType.SellInvoice || invoice.InvoiceType == InvoiceType.IncomingPayment)
-                    totalAccount -= invoice.Cost + invoice.Services;
-            }
-            return totalAccount;
-            
         }
     }
 }

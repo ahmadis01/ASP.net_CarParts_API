@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="wwwroot\Images\Brands\" />
     <Folder Include="wwwroot\Images\Cars\" />
     <Folder Include="wwwroot\Images\Categories\" />

@@ -29,7 +29,6 @@ namespace CarParts.SqlServer.DataBase
                 .HasForeignKey(x => x.BrandId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            //Seeding a  'Administrator' role to AspNetRoles table
 
         }
         #region - properties -

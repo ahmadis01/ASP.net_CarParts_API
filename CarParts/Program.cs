@@ -20,6 +20,7 @@ using CarParts.Repoistory.ClientRepository;
 using CarParts.Repoistory.InvoiceRepository;
 using CarParts.Data;
 using CarParts.Repositories.CarCategoryRepository;
+using CarParts.Repositories.SharedRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -39,6 +40,7 @@ builder.Services.AddTransient<IClientRepository, ClientRepository>();
 builder.Services.AddTransient<IInvoiceRepository, InvoiceRepository>();
 builder.Services.AddTransient<IBrandRepository, BrandRepository>();
 builder.Services.AddTransient<ICarCategoryRepository, CarCategoryRepository>();
+builder.Services.AddTransient<ISharedRepository, SharedRepository>();
 builder.Services.AddTransient<Seeder>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);   
 builder.Services.AddHttpContextAccessor();
@@ -73,7 +75,7 @@ builder.Services.AddSwaggerGen(option =>
     option.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 builder.Services.AddDbContext<CarPartContext>(o =>
-o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("CarParts.SqlServer")));
 
 
 builder.Services.AddIdentity<User , IdentityRole<int>>(identity =>
@@ -126,20 +128,7 @@ builder.Services.AddCors(o =>
 var app = builder.Build();
 
 
-if (args.Length == 1 && args[0].ToLower() == "seed")
-    Seed(app);
 
-//Seed Data
-void Seed(IHost app)
-{
-    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-
-    using (var scope = scopedFactory.CreateScope())
-    {
-        var service = scope.ServiceProvider.GetService<Seeder>();
-        service.SeedData();
-    }
-}
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();

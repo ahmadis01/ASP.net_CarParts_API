@@ -96,14 +96,14 @@ namespace CarParts.Repoistory.InvoiceRepository
             var invoices = _context.Invoices.Where(i => i.ClientId == clientId).OrderByDescending(i => i.CreatedAt);
             foreach (var invoice in invoices)
             {
-                var account = new GetAccountDto
+                accountDto.Add(new GetAccountDto
                 {
                     Cost = invoice.Cost,
                     Description = invoice.Description,
                     InvoiceType = invoice.InvoiceType,
-                    Services = invoice.Services
-                };
-                accountDto.Add(account);
+                    Services = invoice.Services,
+                    Date = invoice.Date
+                });
             }
             return accountDto;
         }
